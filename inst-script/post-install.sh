@@ -52,9 +52,9 @@ fi
 ln -sf "${ALM_ETC_DIR}/alminium.conf" "${APACHE_SITE_CONF_DIR}/" 
 
 # OS depend installing
-source inst-script/${OS}/post-install
+source inst-script/${OS}/post-install.sh
 
 # restart service
-source inst-script/service-restart
+source inst-script/service-restart.sh
 
 # vim: set ts=2 sw=2 et:

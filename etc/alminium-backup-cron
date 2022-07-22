@@ -4,7 +4,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 USER=root
 MAILTO=root
 
-ALM_BACKUP_CMD=/opt/alminium/backup
+ALM_BACKUP_CMD=/opt/alminium/backup.sh
 ALM_BACKUP_DIR=#ALM_BACKUP_DIR#
 ALM_BACKUP_LOG=#ALM_BACKUP_LOG#
 

@@ -36,10 +36,10 @@ setup_configurations() {
   cp -f  redmine/Gemfile.local   ${ALM_INSTALL_DIR}/
   cp -fr redmine/config/*        ${ALM_INSTALL_DIR}/config/
   cp -fr redmine/public/themes/* ${ALM_INSTALL_DIR}/public/themes/
-  cp     ./{backup,restore} ${ALM_INSTALL_DIR}/
+  cp     ./{backup.sh,restore.sh} ${ALM_INSTALL_DIR}/
   mkdir ${ALM_INSTALL_DIR}/inst-script
-  cp ./inst-script/{config-backup,functions} \
-     ./inst-script/${OS}/service-restart \
+  cp ./inst-script/{config-backup.sh,functions.sh} \
+     ./inst-script/${OS}/service-restart.sh \
      ${ALM_INSTALL_DIR}/inst-script/
   ln -s ${ALM_INSTALL_DIR}/inst-script/* ${ALM_INSTALL_DIR}/
 
@@ -93,14 +93,14 @@ create_redmine_token() {
 # create DB
 create_db() {
   if [ "${ALM_DB_SETUP}" = "y" ]; then
-    source redmine/setup/create-db
+    source redmine/setup/create-db.sh
   fi
 }
 
 # setup DB
 setup_db() {
   if [ "${ALM_DB_SETUP}" = "y" ]; then
-    source redmine/setup/setup-db
+    source redmine/setup/setup-db.sh
   fi
 }
 
@@ -125,7 +125,7 @@ setup_hooks
 
 # install plugins
 echo "** install redmine plugins **"
-source redmine/setup/install-plugins
+source redmine/setup/install-plugins.sh
 
 echo "** install gems **"
 install_gems
@@ -140,7 +140,7 @@ setup_db
 echo "instll redmine pluguins for jenkins **"
 # jenkins関連プラグイン
 # この位置でインストールしないとエラーになる
-source redmine/setup/install-plugins-jenkins
+source redmine/setup/install-plugins-jenkins.sh
 
 echo "** set authorities **"
 # 権限設定

@@ -20,7 +20,7 @@ GEM=${GEM:-gem}
 cd ${ALM_SRC_DIR}
 
 # include functions
-source inst-script/functions
+source inst-script/functions.sh
 
 # start uninstall
 echo "ALMiniumをアンインストールします。"

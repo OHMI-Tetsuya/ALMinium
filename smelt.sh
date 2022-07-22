@@ -28,25 +28,25 @@ RM_ARC=https://github.com/redmine/redmine/archive/${RM_VER}.tar.gz
 PATH=/usr/local/bin:${PATH}
 
 # include functions
-source inst-script/functions
+source inst-script/functions.sh
 
 # check memory size
-source inst-script/check-mem
+source inst-script/check-mem.sh
 
 # check user
-source inst-script/check-user
+source inst-script/check-user.sh
 
 # check old alminium existance
-source inst-script/check-old-alm
+source inst-script/check-old-alm.sh
 
 # OSを確認
-source inst-script/check-os
+source inst-script/check-os.sh
 
 # gitコマンドをチェック
-source inst-script/check-git
+source inst-script/check-git.sh
 
 # 各種設定
-source inst-script/config-alminium
+source inst-script/config-alminium.sh
 
 # 一時データ保存場所確保
 mkdir -p ${ALM_SRC_DIR}/cache
@@ -60,20 +60,20 @@ git submodule sync
 git submodule update
 
 # select db
-source inst-script/select-db
+source inst-script/select-db.sh
 
 # pre install
-source inst-script/pre-install
+source inst-script/pre-install.sh
 
 # setup apache
-source inst-script/config-apache
+source inst-script/config-apache.sh
 
 # install Redmine
-source inst-script/install-redmine
+source inst-script/install-redmine.sh
 
 # post install
 echo "*** run post-install script ***"
-source inst-script/post-install
+source inst-script/post-install.sh
 
 # setup for SUBDIRECTORY
 if [ "${ALM_SUBDIR}" != "" ]; then
@@ -89,16 +89,16 @@ fi
 
 # 定期バックアップ設定
 if [ "${ALM_ENABLE_AUTO_BACKUP}" = "y" ]; then
-  source inst-script/config-backup
+  source inst-script/config-backup.sh
 fi
 
 # setup for jenkins
 if [ "${ALM_ENABLE_JENKINS}" = "y" ]; then
-  source inst-script/install-jenkins
+  source inst-script/install-jenkins.sh
 fi
 
 # config log directories
-source inst-script/config-logs
+source inst-script/config-logs.sh
 
 # smelt completed
 if [ "${ALM_UPGRADE}" != "y" ]; then

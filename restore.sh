@@ -69,7 +69,7 @@ ALM_REPOS_BACKUP=${ALM_RESTORE_TMP_DIR}/repo.tar.gz
 cd ${ALM_SRC_DIR}
 
 # include functions
-source inst-script/functions
+source inst-script/functions.sh
 
 # バックアップの復元
 echo "${ALM_BACKUP_FILE_PATH}を復元します。"
@@ -126,7 +126,7 @@ fi
 cd ${ALM_SRC_DIR}
 if [ -f inst-script/service-restart ]; then
   echo "サービスを再起動します。"
-  source ./inst-script/service-restart
+  source ./inst-script/service-restart.sh
 else
   echo "サービスを再起動してください。"
 fi

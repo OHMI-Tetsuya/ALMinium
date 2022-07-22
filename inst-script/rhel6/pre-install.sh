@@ -59,12 +59,12 @@ fi
 #if [[ `which ruby` == "" || ! `ruby --version` =~  2\.1\. ]]; then
 #    rpm -Uvh "https://github.com/hansode/ruby-rpm/blob/master/6/x86_64/ruby-2.1.2-2.el6.x86_64.rpm?raw=true"
 #fi
-source inst-script/${OS}/install-ruby 
+source inst-script/${OS}/install-ruby.sh
 
 # git update
 if [ "${GIT_UPDATE}" = "y" ]; then
   yum remove -y git
   #curl -s https://setup.ius.io/ | bash
   #yum install -y git2u
-  source inst-script/git_build_install
+  source inst-script/git_build_install.sh
 fi

@@ -24,7 +24,7 @@ ALM_CURRENT_DIR=`pwd`
 cd ${ALM_SRC_DIR}
 
 # include functions
-source inst-script/functions
+source inst-script/functions.sh
 
 # backup directry
 if [ "$1" != "" -a "$1" != "-" ]; then

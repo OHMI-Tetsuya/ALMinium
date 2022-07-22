@@ -21,7 +21,7 @@ ALM_DB_ROOT_PASS=${3:-${ALM_DB_ROOT_PASS}}
 cd ${ALM_SRC_DIR}
 
 # 実行ユーザーをチェック
-source inst-script/check-user
+source inst-script/check-user.sh
 
 # ALMiniumインストール状況をチェック
 if [ ! -e ${ALM_INSTALL_DIR}/app ]; then
@@ -30,7 +30,7 @@ if [ ! -e ${ALM_INSTALL_DIR}/app ]; then
 fi
 
 # OSをチェック
-source inst-script/check-os
+source inst-script/check-os.sh
 
 # バックアップの確認 
 echo "#####################################################################"
@@ -44,7 +44,7 @@ echo "#####################################################################"
 read DO_CONTINUE
 
 # バックアップ実行
-source backup ${ALM_BACKUP_DIR} ${ALM_DB_HOST} ${ALM_DB_ROOT_PASS}
+source backup.sh ${ALM_BACKUP_DIR} ${ALM_DB_HOST} ${ALM_DB_ROOT_PASS}
 if [ $? -gt 0 ]; then
   echo "バックアップに失敗したため、処理を中止します"
   exit 1
@@ -112,11 +112,11 @@ fi
 
 #　install ALMinium by smelt
 ALM_UPGRADE=y
-source ./smelt ${ALM_DB_HOST} ${ALM_DB_ROOT_PASS}
+source ./smelt.sh ${ALM_DB_HOST} ${ALM_DB_ROOT_PASS}
 
 #バックアップの復元
 ALM_DB_RESTORE=no
-source ./restore ${ALM_BACKUP_DIR}/${ALM_BACKUP_NAME} ${ALM_DB_HOST} ${ALM_DB_ROOT_PASS}
+source ./restore.sh ${ALM_BACKUP_DIR}/${ALM_BACKUP_NAME} ${ALM_DB_HOST} ${ALM_DB_ROOT_PASS}
 
 # log復元
 restore_log() {
