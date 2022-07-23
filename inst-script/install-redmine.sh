@@ -137,10 +137,12 @@ create_redmine_token
 echo "** setup redmine db **"
 setup_db
 
-echo "instll redmine pluguins for jenkins **"
-# jenkins関連プラグイン
-# この位置でインストールしないとエラーになる
-source redmine/setup/install-plugins-jenkins.sh
+if [ "${ALM_ENABLE_JENKINS}" = "y" ]; then
+  echo "instll redmine pluguins for jenkins **"
+  # jenkins関連プラグイン
+  # この位置でインストールしないとエラーになる
+  source redmine/setup/install-plugins-jenkins.sh
+fi
 
 echo "** set authorities **"
 # 権限設定
