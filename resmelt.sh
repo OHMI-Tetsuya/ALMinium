@@ -1,4 +1,4 @@
 #!/bin/bash
-./uninstall
-./smelt
+./uninstall.sh
+./smelt.sh
 
