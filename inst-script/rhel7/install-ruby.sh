@@ -10,7 +10,7 @@ if [ "`which ruby`" != "" -a "`ruby -v | grep 2.0.`" != "" ]; then
   echo -n "インストールを中止する場合は、ctrl+cでスクリプトの実行を中断してください。"
   read CONTINUE
   gem uninstall bundler
-  yum -y remove ruby ruby-devel rubygem-nokogiri rubygem-rack rubygem-rake rubygem-rake-compiler
+  yum -y remove ruby ruby-devel ruby-irb ruby-libs rubygem-bigdecimal rubygem-io-console rubygem-json rubygem-psych rubygem-rdoc rubygems rubygem-nokogiri rubygem-rack rubygem-rake rubygem-rake-compiler
 fi
 
 # clone and install rbenv environment
