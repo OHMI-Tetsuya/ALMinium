@@ -28,7 +28,7 @@ if [ "`which rbenv`" = "" ]; then
 fi
 
 # install latest ruby
-RBVER=2.5.1
+RBVER=2.5.9
 rbenv install -s -v ${RBVER}
 rbenv rehash
 
