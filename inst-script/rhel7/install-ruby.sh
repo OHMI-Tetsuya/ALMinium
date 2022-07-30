@@ -15,8 +15,8 @@ fi
 
 # clone and install rbenv environment
 if [ "`which rbenv`" = "" ]; then
-  git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
-  git clone git://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+  git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
   echo export PATH=/root/.rbenv/shims:'$PATH' >> /etc/profile
   echo 'export PATH="${HOME}/.rbenv/bin:$PATH"' >> ~/.bash_profile
   echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
