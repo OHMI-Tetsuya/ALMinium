@@ -10,13 +10,13 @@ if [ "`which ruby`" != "" -a "`ruby -v | grep 2.0.`" != "" ]; then
   echo -n "インストールを中止する場合は、ctrl+cでスクリプトの実行を中断してください。"
   read CONTINUE
   gem uninstall bundler
-  yum -y remove ruby ruby-devel rubygem-nokogiri rubygem-rack rubygem-rake rubygem-rake-compiler
+  yum -y remove ruby ruby-devel ruby-irb ruby-libs rubygem-bigdecimal rubygem-io-console rubygem-json rubygem-psych rubygem-rdoc rubygems rubygem-nokogiri rubygem-rack rubygem-rake rubygem-rake-compiler
 fi
 
 # clone and install rbenv environment
 if [ "`which rbenv`" = "" ]; then
-  git clone git://github.com/sstephenson/rbenv.git ~/.rbenv
-  git clone git://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+  git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
   echo export PATH=/root/.rbenv/shims:'$PATH' >> /etc/profile
   echo 'export PATH="${HOME}/.rbenv/bin:$PATH"' >> ~/.bash_profile
   echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
@@ -28,7 +28,7 @@ if [ "`which rbenv`" = "" ]; then
 fi
 
 # install latest ruby
-RBVER=2.5.1
+RBVER=2.5.9
 rbenv install -s -v ${RBVER}
 rbenv rehash
 
