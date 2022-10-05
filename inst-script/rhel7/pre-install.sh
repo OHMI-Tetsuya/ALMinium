@@ -42,8 +42,10 @@ if [ "${ALM_DB_SETUP}" = "y" -a "${ALM_USE_EXISTING_DB}" != "y" ]; then
 fi
 
 # ruby
-if [ "`which ruby`" == "" -o "`ruby --version | grep 2.0.`" != "" ]; then
+if [ "`which ruby`" == "" ]; then
 #    rpm -Uvh "https://github.com/hansode/ruby-rpm/blob/master/6/x86_64/ruby-2.1.2-2.el6.x86_64.rpm?raw=true"
+  source inst-script/${OS}/install-ruby.sh
+elif [ "`ruby --version | grep 2.0.`" != "" ]; then
   source inst-script/${OS}/install-ruby.sh
 fi
 

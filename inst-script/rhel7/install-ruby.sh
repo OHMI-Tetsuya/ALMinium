@@ -5,12 +5,14 @@ yum install -y git-core zlib zlib-devel gcc-c++ patch readline readline-devel li
 
 # ruby
 # if ruby is old, remove
-if [ "`which ruby`" != "" -a "`ruby -v | grep 2.0.`" != "" ]; then
-  echo -n "Version 2.0のrubyがインストールされています。削除して新しいバージョンをインストールします。"
-  echo -n "インストールを中止する場合は、ctrl+cでスクリプトの実行を中断してください。"
-  read CONTINUE
-  gem uninstall bundler
-  yum -y remove ruby ruby-devel ruby-irb ruby-libs rubygem-bigdecimal rubygem-io-console rubygem-json rubygem-psych rubygem-rdoc rubygems rubygem-nokogiri rubygem-rack rubygem-rake rubygem-rake-compiler
+if [ "`which ruby`" != "" ]; then
+  if [ "`ruby -v | grep 2.0.`" != "" ]; then
+    echo -n "Version 2.0のrubyがインストールされています。削除して新しいバージョンをインストールします。"
+    echo -n "インストールを中止する場合は、ctrl+cでスクリプトの実行を中断してください。"
+    read CONTINUE
+    gem uninstall bundler
+    yum -y remove ruby ruby-devel ruby-irb ruby-libs rubygem-bigdecimal rubygem-io-console rubygem-json rubygem-psych rubygem-rdoc rubygems rubygem-nokogiri rubygem-rack rubygem-rake rubygem-rake-compiler
+  fi
 fi
 
 # clone and install rbenv environment
