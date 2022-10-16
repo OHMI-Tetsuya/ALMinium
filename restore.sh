@@ -124,7 +124,7 @@ if [ "${ALM_DB_BACKUP}" != "no" ]; then
 fi
 
 cd ${ALM_SRC_DIR}
-if [ -f inst-script/service-restart ]; then
+if [ -f inst-script/service-restart.sh ]; then
   echo "サービスを再起動します。"
   source ./inst-script/service-restart.sh
 else
