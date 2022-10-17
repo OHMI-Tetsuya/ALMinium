@@ -22,3 +22,4 @@ yum install -y jenkins
 mkdir -p /etc/systemd/system/jenkins.service.d
 echo -e "[Service]\nEnvironment=\"JENKINS_PREFIX=/jenkins\"\n" > /etc/systemd/system/jenkins.service.d/override.conf
 service jenkins restart
+systemctl enable jenkins
