@@ -137,7 +137,7 @@ create_redmine_token
 echo "** setup redmine db **"
 setup_db
 
-if [ "${ALM_ENABLE_JENKINS}" = "y" ]; then
+if [ "${ALM_ENABLE_JENKINS}" = "y" -o "${JENKINS_INSTALLED}" = "y" ]; then
   echo "instll redmine pluguins for jenkins **"
   # jenkins関連プラグイン
   # この位置でインストールしないとエラーになる
