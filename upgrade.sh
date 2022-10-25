@@ -106,7 +106,12 @@ rm -fr cache/* *.installed
 rm -fr ${ALM_ETC_DIR}/passenger.*
 
 # Jenkinsが設置されているか否か
-if [ "$(grep \"JENKINS\" /etc/opt/alminium/alminium.conf)" = "" ]; then
+##############################################################################
+# \"JENKINS\"だと"JENKINS"(ダブルクォートJENKINSダブルクォート)でgrepするので
+# 常に""でJENKINS_INSTALLED=yが実行されていた
+##############################################################################
+#if [ "$(grep \"JENKINS\" /etc/opt/alminium/alminium.conf)" = "" ]; then
+if [ "$(grep "JENKINS" /etc/opt/alminium/alminium.conf)" = "" ]; then
   JENKINS_INSTALLED=y
 fi
 
