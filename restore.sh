@@ -21,11 +21,8 @@ ALM_DB_ROOT_PASS=${3:-${ALM_DB_ROOT_PASS}}
 ALM_DEAULT_BACKUP_DIR=/var/opt/alminium-backup
 
 # 実行ユーザーをチェック
-if [ "`whoami`" != 'root' ]; then
-    echo "ALMiniumのインストールはルートユーザで行う必要があります。"
-    echo "rootユーザもしくはsudoで実行してください。"
-    exit 1
-fi
+source inst-script/check-user.sh
+check_user ALMiniumのリストア
 
 # バックアップファイルをチェック
 if [ "$1" = "" ]; then

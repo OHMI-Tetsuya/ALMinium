@@ -22,6 +22,7 @@ cd ${ALM_SRC_DIR}
 
 # 実行ユーザーをチェック
 source inst-script/check-user.sh
+check_user ALMiniumのアップグレード
 
 # ALMiniumインストール状況をチェック
 if [ ! -e ${ALM_INSTALL_DIR}/app ]; then

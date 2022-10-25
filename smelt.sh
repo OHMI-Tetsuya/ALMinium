@@ -35,6 +35,7 @@ source inst-script/check-mem.sh
 
 # check user
 source inst-script/check-user.sh
+check_user ALMiniumのインストール
 
 # check old alminium existance
 source inst-script/check-old-alm.sh
