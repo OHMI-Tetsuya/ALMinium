@@ -38,7 +38,7 @@ setup_configurations() {
   cp -fr redmine/public/themes/* ${ALM_INSTALL_DIR}/public/themes/
   cp     ./{backup.sh,restore.sh} ${ALM_INSTALL_DIR}/
   mkdir ${ALM_INSTALL_DIR}/inst-script
-  cp ./inst-script/{config-backup.sh,functions.sh} \
+  cp ./inst-script/{check-user.sh,config-backup.sh,functions.sh} \
      ./inst-script/${OS}/service-restart.sh \
      ${ALM_INSTALL_DIR}/inst-script/
   ln -s ${ALM_INSTALL_DIR}/inst-script/* ${ALM_INSTALL_DIR}/

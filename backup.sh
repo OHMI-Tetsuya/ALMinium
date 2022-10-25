@@ -39,11 +39,8 @@ else
 fi
 
 # 実行ユーザーチェック
-if [ "`whoami`" != 'root' ]; then
-  echo -n "本処理はルートユーザで行う必要があります。"
-  echo "rootユーザもしくはsudoで実行してください。"
-  exit 1
-fi
+source inst-script/check-user.sh
+check_user ALMiniumのバックアップ
 
 #バックアップディレクトリのチェック
 if [ ! -d ${ALM_BACKUP_DIR} ]; then
