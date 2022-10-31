@@ -78,7 +78,7 @@ source inst-script/post-install.sh
 
 # setup for SUBDIRECTORY
 if [ "${ALM_SUBDIR}" != "" ]; then
-  ln -sf ${ALM_INSTALL_DIR}/public /var/www/html${ALM_SUBDIR}
+  sudo ln -sf ${ALM_INSTALL_DIR}/public /var/www/html${ALM_SUBDIR}
   echo ${ALM_SUBDIR} > ${ALM_INSTALL_DIR}/subdirname
 fi
 

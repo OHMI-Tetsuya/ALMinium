@@ -1,4 +1,4 @@
 #!/bin/bash
 
-apt-get install -y mysql-client
+sudo apt-get install -y mysql-client
 

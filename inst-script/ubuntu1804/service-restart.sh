@@ -1,4 +1,4 @@
 #!/bin/bash
-service apache2 stop
-service apache2 start
+sudo service apache2 stop
+sudo service apache2 start
 

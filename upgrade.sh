@@ -56,7 +56,7 @@ backup_log() {
   local log_dir=$1
   local backup_dir=$2
   if [ -d ${log_dir} ]; then
-    cp -pr ${log_dir}/ ${backup_dir}
+    sudo cp -pr ${log_dir}/ ${backup_dir}
   fi
 }
 
@@ -71,13 +71,13 @@ backup_conf() {
   local conf_dir=$1
   local conf_name=$2
   local backup_dir=$3
-  mkdir ${backup_dir}/${conf_name}
-  cp -pr ${conf_dir}/* ${backup_dir}/${conf_name}
-  echo "these were stored in ${conf_dir}." > ${backup_dir}/${conf_name}/README.txt
+  sudo mkdir ${backup_dir}/${conf_name}
+  sudo cp -pr ${conf_dir}/* ${backup_dir}/${conf_name}
+  sudo bash -c "echo \"these were stored in ${conf_dir}.\" > ${backup_dir}/${conf_name}/README.txt"
 }
 
 ALM_CONFIGS_BACKUP_DIR=${ALM_BACKUP_DIR}/configs-${ALM_BACKUP_ID}
-mkdir ${ALM_CONFIGS_BACKUP_DIR}
+sudo mkdir ${ALM_CONFIGS_BACKUP_DIR}
 backup_conf ${ALM_ETC_DIR} apache_conf ${ALM_CONFIGS_BACKUP_DIR}
 backup_conf ${ALM_INSTALL_DIR}/config alminium_config ${ALM_CONFIGS_BACKUP_DIR}
 backup_conf ${ALM_INSTALL_DIR}/hooks alminium_hooks ${ALM_CONFIGS_BACKUP_DIR}
@@ -100,11 +100,11 @@ echo "ALMiniumのアップグレードを開始・・・"
 
 # アップグレード対象を削除
 if [ -f ${ALM_INSTALL_DIR}/subdirname ]; then
-  rm -f /var/www/html`cat ${ALM_INSTALL_DIR}/subdirname`
+  sudo rm -f /var/www/html`cat ${ALM_INSTALL_DIR}/subdirname`
 fi
-rm -fr ${ALM_INSTALL_DIR}/* ${ALM_INSTALL_DIR}/.[^.]*
+sudo rm -fr ${ALM_INSTALL_DIR}/* ${ALM_INSTALL_DIR}/.[^.]*
 rm -fr cache/* *.installed
-rm -fr ${ALM_ETC_DIR}/passenger.*
+sudo rm -fr ${ALM_ETC_DIR}/passenger.*
 
 # Jenkinsが設置されているか否か
 ##############################################################################
@@ -130,7 +130,7 @@ restore_log() {
   local TO_PATH=$2
   if [ "${TO_PATH}" = "" ];then TO_PATH=$1; fi
   if [ -d ${LOG_DIR} -a "`ls ${LOG_DIR} 2>/dev/null`" != "" ]; then
-    cp -pr ${LOG_DIR}/* ${ALM_LOG_DIR}/${TO_PATH}/
+    sudo cp -pr ${LOG_DIR}/* ${ALM_LOG_DIR}/${TO_PATH}/
   fi
 }
 

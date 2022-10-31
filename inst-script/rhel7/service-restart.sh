@@ -1,4 +1,4 @@
 #!/bin/bash
-service httpd stop
-service httpd start
+sudo service httpd stop
+sudo service httpd start
 

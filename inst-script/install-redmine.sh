@@ -8,7 +8,8 @@
 
 # download redmine
 download_redmine() {
-  mkdir -p ${ALM_INSTALL_DIR}
+  sudo mkdir -p ${ALM_INSTALL_DIR}
+  sudo chown -R `whoami`: ${ALM_INSTALL_DIR}
   cd cache
   wget ${RM_ARC}
   tar zxf ${RM_VER}.tar.gz
@@ -64,8 +65,8 @@ setup_hooks() {
 create_repo_dir() {
   if [ "${ALM_UPGRADE}" != "y" ]; then
     # create directory for vcs
-    mkdir -p ${ALM_VAR_DIR}/{git,svn,hg,maven,github}
-    chown -R ${APACHE_USER}:${APACHE_USER} ${ALM_VAR_DIR}/*
+    sudo mkdir -p ${ALM_VAR_DIR}/{git,svn,hg,maven,github}
+    sudo chown -R ${APACHE_USER}:${APACHE_USER} ${ALM_VAR_DIR}/*
   fi
 }
 
@@ -146,4 +147,5 @@ fi
 
 echo "** set authorities **"
 # 権限設定
-chown -R ${APACHE_USER}:${APACHE_USER} ${ALM_INSTALL_DIR}/*
+#chown -R ${APACHE_USER}:${APACHE_USER} ${ALM_INSTALL_DIR}/*
+sudo usermod -aG `id -gn \`whoami\`` ${APACHE_USER}

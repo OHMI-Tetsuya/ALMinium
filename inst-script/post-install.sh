@@ -16,40 +16,40 @@ elif [ "`echo ${OS_TYPE} | grep rhel`" != "" ]; then OS_TYPE=rhel; fi
 
 for FILE in $(ls etc/ | grep '.conf$')
 do
-  sed -e "s|#HOSTNAME#|${ALM_HOSTNAME}|" \
-      -e "s|#${OS_TYPE}# *||" \
-      -e "s|${REPLACE_SSL}||" \
-      -e "s|${REPLACE_JENKINS}||" \
-      -e "s|#SUBDIR#|${ALM_SUBDIR}|" \
-      -e "s|#DOCUMENTROOT#|${DOCMENT_ROOT}|" \
-      -e "s|#DB_HOST#|${ALM_DB_HOST}|" \
-      "etc/${FILE}" > "${ALM_ETC_DIR}/${FILE}"
+  sudo bash -c "sed -e \"s|#HOSTNAME#|${ALM_HOSTNAME}|\" \
+      -e \"s|#${OS_TYPE}# *||\" \
+      -e \"s|${REPLACE_SSL}||\" \
+      -e \"s|${REPLACE_JENKINS}||\" \
+      -e \"s|#SUBDIR#|${ALM_SUBDIR}|\" \
+      -e \"s|#DOCUMENTROOT#|${DOCMENT_ROOT}|\" \
+      -e \"s|#DB_HOST#|${ALM_DB_HOST}|\" \
+      \"etc/${FILE}\" > \"${ALM_ETC_DIR}/${FILE}\""
 done
 
 # log rotate
-cp ${ALM_ETC_DIR}/alminium-logrotate /etc/logrotate.d/alminium
+sudo cp ${ALM_ETC_DIR}/alminium-logrotate /etc/logrotate.d/alminium
 
 # apaches's conf
 ## passenger
 if [ "${ALM_PASSSENGER_PACKAGE_AVAILABLE}" = "1" ]; then
   # installed from os's packaged. so configure with passenger-config
-  passenger-config validate-install --auto --validate-apache2
+  sudo passenger-config validate-install --auto --validate-apache2
 else
   # installed from gem. so configure with bundle exec i
   # passenger-install-apache2-module
   pushd ${ALM_INSTALL_DIR}
-  ${BUNDLER} exec passenger-install-apache2-module --snippet > ${ALM_ETC_DIR}/passenger.conf
+  sudo bash -cl "${BUNDLER} exec passenger-install-apache2-module --snippet > \"${ALM_ETC_DIR}/passenger.conf\""
   if [ "`echo ${OS} | grep rhel`" != "" ]; then
-    ${BUNDLER} exec passenger-install-apache2-module --auto
+    sudo bash -cl "${BUNDLER} exec passenger-install-apache2-module --auto"
   else
-    ${BUNDLER} exec passenger-install-apache2-module --auto --apxs2-path='/usr/bin/apxs'
+    sudo bash -cl "${BUNDLER} exec passenger-install-apache2-module --auto --apxs2-path='/usr/bin/apxs'"
   fi
   popd
-  ln -sf "${ALM_ETC_DIR}/passenger.conf" "${APACHE_CONF_DIR}/"
-  rm "${APACHE_CONF_DIR}//passenger.load" 2>/dev/null
+  sudo ln -sf "${ALM_ETC_DIR}/passenger.conf" "${APACHE_CONF_DIR}/"
+  sudo rm "${APACHE_CONF_DIR}//passenger.load" 2>/dev/null
 fi
 ## alminium
-ln -sf "${ALM_ETC_DIR}/alminium.conf" "${APACHE_SITE_CONF_DIR}/" 
+sudo ln -sf "${ALM_ETC_DIR}/alminium.conf" "${APACHE_SITE_CONF_DIR}/" 
 
 # OS depend installing
 source inst-script/${OS}/post-install.sh

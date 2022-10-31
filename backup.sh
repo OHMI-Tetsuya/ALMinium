@@ -38,9 +38,10 @@ else
   ALM_BACKUP_DIR=/var/opt/alminium-backup
 fi
 
+#cronでも動くようにユーザチェックを外す
 # 実行ユーザーチェック
-source inst-script/check-user.sh
-check_user ALMiniumのバックアップ
+#source inst-script/check-user.sh
+#check_user ALMiniumのバックアップ
 
 #バックアップディレクトリのチェック
 if [ ! -d ${ALM_BACKUP_DIR} ]; then
@@ -64,47 +65,49 @@ check_backup_result() {
     echo "$2(${ALM_BACKUP_DIR}/$1)が成功しました。"
   else
     echo "$2(${ALM_BACKUP_DIR}/$1)が失敗しました。"
+    unset RESULT
     exit 1
   fi
 }
 
 echo "MySQLデータベースをバックアップします。"
-result=0
-mysqldump `db_option_root` alminium > ${ALM_BACKUP_DIR}/${ALM_DBBACKUP_NAME} || result=$?
-check_backup_result ${ALM_DBBACKUP_NAME} "データベースバックアップ" ${result}
+export RESULT=0
+sudo bash -c "mysqldump `db_option_root` alminium > ${ALM_BACKUP_DIR}/${ALM_DBBACKUP_NAME} || RESULT=$?"
+check_backup_result ${ALM_DBBACKUP_NAME} "データベースバックアップ" ${RESULT}
 
 #redmineの添付ファイルをバックアップ
 echo "Redmineの添付ファイルをバックアップします。"
 pushd ${ALM_INSTALL_DIR}/files/
-result=0
-tar czf ${ALM_BACKUP_DIR}/${ALM_FILE_BACKUP} . || result=$?
-check_backup_result ${ALM_FILE_BACKUP} "添付ファイルバックアップ" ${result}
+export RESULT=0
+sudo tar czf ${ALM_BACKUP_DIR}/${ALM_FILE_BACKUP} . || RESULT=$?
+check_backup_result ${ALM_FILE_BACKUP} "添付ファイルバックアップ" ${RESULT}
 popd
 
 #ソースコードリポジトリ
 echo "ソースコードリポジトリをバックアップします。"
-result=0
+export RESULT=0
 pushd ${ALM_VAR_DIR}/
-tar czf ${ALM_BACKUP_DIR}/${ALM_REPOS_BACKUP} . || result=$?
-check_backup_result ${ALM_REPOS_BACKUP} "ソースコードリポジトリバックアップ" ${result}
+sudo tar czf ${ALM_BACKUP_DIR}/${ALM_REPOS_BACKUP} . || RESULT=$?
+check_backup_result ${ALM_REPOS_BACKUP} "ソースコードリポジトリバックアップ" ${RESULT}
 popd
 
 # バックアップ統合
 pushd ${ALM_BACKUP_DIR}
-result=0
-tar czf ./${ALM_BACKUP_NAME} \
+export RESULT=0
+sudo tar czf ./${ALM_BACKUP_NAME} \
     ./${ALM_DBBACKUP_NAME} ./${ALM_FILE_BACKUP} ./${ALM_REPOS_BACKUP} || result=$?
-check_backup_result ${ALM_BACKUP_NAME} "バックアップファイル統合" ${result}
+check_backup_result ${ALM_BACKUP_NAME} "バックアップファイル統合" ${RESULT}
 
 # バックアップ終了
 echo "[`date`]  ALMiniumのデータのバックアップが終了しました。"
 echo "バックアップファイル名：${ALM_BACKUP_DIR}/${ALM_BACKUP_NAME}"
+unset RESULT
 
 # 古いバックアップファイルを削除
 if [ "${ALM_BACKUP_EXPIRY}" != "" ]; then
   echo -n "[`date`]  ${ALM_BACKUP_EXPIRY}日経過した"
   echo    "バックアップファイルを削除します。"
-  find ${ALM_BACKUP_DIR}/*.tar.gz \
+  sudo find ${ALM_BACKUP_DIR}/*.tar.gz \
        -mtime +${ALM_BACKUP_EXPIRY} -exec rm -f {} \;
 fi
 popd

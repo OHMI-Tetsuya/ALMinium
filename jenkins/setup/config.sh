@@ -4,8 +4,8 @@ JENKINS_PLUGIN_DIR=/var/lib/jenkins/plugins
 
 # create jenkins plugin directry
 if [ ! -d ${JENKINS_PLUGIN_DIR} ]; then
-  mkdir -p ${JENKINS_PLUGIN_DIR}
-  chown jenkins:jenkins ${JENKINS_PLUGIN_DIR}
+  sudo mkdir -p ${JENKINS_PLUGIN_DIR}
+  sudo chown jenkins:jenkins ${JENKINS_PLUGIN_DIR}
 fi
 
 # try connect to jenkins service up
@@ -20,8 +20,8 @@ do
   wget --no-proxy --spider http://localhost:8080/jenkins/jnlpJars/jenkins-cli.jar 2>/dev/null
   RET=$?
 done
-sed -i.org "s/<useSecurity>true/<useSecurity>false/" /var/lib/jenkins/config.xml
-service jenkins restart
+sudo sed -i.org "s/<useSecurity>true/<useSecurity>false/" /var/lib/jenkins/config.xml
+sudo service jenkins restart
 
 # Jenkinsの設定を自動で進めるために初期ログインとアクセス権設定を手動で実施
 #echo "## Jenkinsの設定を継続するため以下を実施してください"
@@ -52,9 +52,9 @@ sed '1d;$d' /tmp/default.js > /tmp/default.json
 ## Now push it to the update URL
 #curl --noproxy localhost -X POST -H "Accept: application/json" -d @/tmp/default.json http://localhost:8080/jenkins/updateCenter/byId/default/postBack --verbose
 if [ ! -e /var/lib/jenkins/updates ]; then
-  mkdir -p /var/lib/jenkins/updates
+  sudo mkdir -p /var/lib/jenkins/updates
 fi
-cp -f /tmp/default.json /var/lib/jenkins/updates/
+sudo cp -f /tmp/default.json /var/lib/jenkins/updates/
 
 # Jenkinsのプロキシ設定
 if [ x"$http_proxy" != x"" ]; then
@@ -86,18 +86,18 @@ if [ x"$http_proxy" != x"" ]; then
     echo "proxy setting for jenkins fail"
     exit 1
   fi
-  service jenkins restart
+  sudo service jenkins restart
 fi
 
 echo セキュリティ解除
 #sed -i.org "s/<useSecurity>true/<useSecurity>false/" /var/lib/jenkins/config.xml
-sed -i.org \
+sudo sed -i.org \
     -e "s/<authorizationStrategy class=\"hudson.security.FullControlOnceLoggedInAuthorizationStrategy\">/<authorizationStrategy class=\"hudson.security.AuthorizationStrategy\$Unsecured\"\/>\n  <\!-- <authorizationStrategy class=\"hudson.security.FullControlOnceLoggedInAuthorizationStrategy\"> -->/" \
     -e "s/<denyAnonymousReadAccess/<\!-- <denyAnonymousReadAccess/" \
     -e "s/\/denyAnonymousReadAccess>/\/denyAnonymousReadAccess> -->/" \
     -e "s/<\/authorizationStrategy>/<\!-- <\/authorizationStrategy> -->/" \
     /var/lib/jenkins/config.xml 
-service jenkins restart
+sudo service jenkins restart
 
 # プラグインインストール
 sleep 10
@@ -138,17 +138,17 @@ rm -rf tmp
 
 # persona-hudmi取得
 if [ ! -d /var/lib/jenkins/persona ]; then
-  git clone https://github.com/okamototk/jenkins-persona-hudmi /var/lib/jenkins/persona
+  sudo git clone https://github.com/okamototk/jenkins-persona-hudmi /var/lib/jenkins/persona
 fi
 
 # 設定ファイルを配置
 if [ ! -f /var/lib/jenkins/config.xml ]; then
-  cp jenkins/config.xml /var/lib/jenkins/config.xml
+  sudo cp jenkins/config.xml /var/lib/jenkins/config.xml
 fi
-chown -R jenkins:jenkins /var/lib/jenkins/
+sudo chown -R jenkins:jenkins /var/lib/jenkins/
 
 # Jenkins再起動
-service jenkins restart
+sudo service jenkins restart
 
 # 初期化時間を見越して少し待つ
 echo "Jenkins初期化中..."

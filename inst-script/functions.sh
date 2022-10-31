@@ -48,6 +48,6 @@ db_test() {
     OPT=`db_option_root`
     DB_NAME=mysql
   fi
-  echo `mysql ${OPT} -e "status" ${DB_NAME} 2>/dev/null`
+  echo `sudo mysql ${OPT} -e "status" ${DB_NAME} 2>/dev/null`
 }
 

@@ -54,7 +54,7 @@ fi
 # リストア用一時ディレクトリ
 ALM_RESTORE_TMP_DIR=${ALM_BACKUP_DIR}/tmp
 if [ ! -d "${ALM_RESTORE_TMP_DIR}" ]; then
-  mkdir "${ALM_RESTORE_TMP_DIR}"
+  sudo mkdir "${ALM_RESTORE_TMP_DIR}"
 fi
 
 # リストア用一時ファイル
@@ -76,7 +76,7 @@ if [ $? -ne 0 ]; then
   echo アクセス権やディスク容量などを確認してくだい。
   exit 1
 fi
-tar xzf ${ALM_BACKUP_FILE_PATH}
+sudo tar xzf ${ALM_BACKUP_FILE_PATH}
 if [ $? -ne 0 ]; then
   echo バックアップの復元に失敗しました。
   echo ${ALM_RESTORE_TMP_DIR}のアクセス権やディスク容量などを確認してくだい。
@@ -84,14 +84,14 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "***リポジトリーデータを復元しています..."
-cd ${ALM_VAR_DIR} && tar xzf ${ALM_REPOS_BACKUP}
+cd ${ALM_VAR_DIR} && sudo tar xzf ${ALM_REPOS_BACKUP}
 if [ $? -ne 0 ]; then
   echo "リポジトリーデータの復元に失敗しました。"
   exit 1
 fi
 
 echo "***Redmine添付ファイルを復元しています..."
-cd ${ALM_INSTALL_DIR}/files/ && tar xzf ${ALM_FILE_BACKUP}
+cd ${ALM_INSTALL_DIR}/files/ && sudo tar xzf ${ALM_FILE_BACKUP}
 if [ $? -ne 0 ]; then
   echo "Redmine添付ファイルの復元に失敗しました。"
   exit 1
@@ -100,7 +100,7 @@ fi
 # データベースの復元
 if [ "${ALM_DB_BACKUP}" != "no" ]; then
   echo "***データベースを復元しています..."
-  mysql `db_option_root` alminium < ${ALM_DB_BACKUP}
+  sudo mysql `db_option_root` alminium < ${ALM_DB_BACKUP}
   if [ $? -ne 0 ]; then
     echo "データベースの復元に失敗しました。"
     exit 1
@@ -109,9 +109,9 @@ if [ "${ALM_DB_BACKUP}" != "no" ]; then
   #データベースのマイグレーション
   echo "データベースのマイグレーションを実施します。"
   cd ${ALM_INSTALL_DIR}
-  ${BUNDLER} exec rake db:migrate RAILS_ENV=production
-  ${BUNDLER} exec rake redmine:plugins:migrate RAILS_ENV=production
-  ${BUNDLER} exec rake tmp:cache:clear RAILS_ENV=production
+  sudo bash -cl "${BUNDLER} exec rake db:migrate RAILS_ENV=production"
+  sudo bash -cl "${BUNDLER} exec rake redmine:plugins:migrate RAILS_ENV=production"
+  bash -cl "${BUNDLER} exec rake tmp:cache:clear RAILS_ENV=production"
   #${BUNDLER} exec rake tmp:sessions:clear RAILS_ENV=production
   if [ $? -ne 0 ]; then
     echo "データベースのマイグレーションに失敗しました。"

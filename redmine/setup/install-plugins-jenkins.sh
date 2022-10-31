@@ -33,7 +33,7 @@ if [ "${ALM_DB_SETUP}" = "y" ]; then
 fi
 
 # 権限を変更
-chown -R ${APACHE_USER}:${APACHE_USER} ${ALM_INSTALL_DIR}/*
+#chown -R ${APACHE_USER}:${APACHE_USER} ${ALM_INSTALL_DIR}/*
 
 # ディレクトリを元に戻す
 popd

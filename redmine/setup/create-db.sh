@@ -9,7 +9,7 @@ if [ "${ALM_UPGRADE}" != "y" ]; then
     if [ "$(db_test)" != "" ]; then
       # create alminium DB
       DB_OPTION_ROOT="`db_option_root`"
-      mysql $(db_option_root) < ${ALM_SRC_DIR}/redmine/setup/createdb.sql
+      sudo mysql $(db_option_root) < ${ALM_SRC_DIR}/redmine/setup/createdb.sql
     else
       echo "データベースを作成することが出来ません。データベースへのアクセス
 権の設定を確認してください。"

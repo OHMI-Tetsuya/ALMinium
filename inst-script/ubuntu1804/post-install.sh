@@ -2,25 +2,25 @@
 
 # apache confs
 ## set Redmine.pm
-mkdir -p /etc/perl/Apache/Authn
-rm -f /etc/perl/Apache/Authn/Redmine.pm
-ln -s ${ALM_INSTALL_DIR}/extra/svn/Redmine.pm /etc/perl/Apache/Authn/Redmine.pm
+sudo mkdir -p /etc/perl/Apache/Authn
+sudo rm -f /etc/perl/Apache/Authn/Redmine.pm
+sudo ln -s ${ALM_INSTALL_DIR}/extra/svn/Redmine.pm /etc/perl/Apache/Authn/Redmine.pm
 
 ## modules
-a2enmod expires
-a2enmod dav_fs
-a2enmod authz_svn
-a2enmod proxy_http
-a2enmod headers
-a2enmod rewrite
-#a2enmod passenger
-a2enmod perl
-a2enmod wsgi
-a2enmod cgi
-a2dismod mpm_event
-a2enmod mpm_prefork
+sudo a2enmod expires
+sudo a2enmod dav_fs
+sudo a2enmod authz_svn
+sudo a2enmod proxy_http
+sudo a2enmod headers
+sudo a2enmod rewrite
+#sudo a2enmod passenger
+sudo a2enmod perl
+sudo a2enmod wsgi
+sudo a2enmod cgi
+sudo a2dismod mpm_event
+sudo a2enmod mpm_prefork
 
 ## site
-a2ensite alminium
+sudo a2ensite alminium
 
 # vim: set ts=2 sw=2 et:

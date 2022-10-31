@@ -13,7 +13,7 @@ fi
 GEM_VER=`gem env version`
 if [ "${GEM_VER}" = "2.7.5" -o "${GEM_VER}" = "2.7.6" ]
 then
-  gem update --system  2.7.4
+  sudo bash -cl "gem update --system  2.7.4"
 fi
 
 # あらかじめインストールしておくrubygems
@@ -28,9 +28,9 @@ do
   echo "**** install ${NAME} (ver. = ${VER}) ****"
   if [ "${VER}" = "-" ]
   then
-    ${GEM} install -f ${NAME} --no-document
+    sudo bash -cl "${GEM} install -f ${NAME} --no-document"
   else
-    ${GEM} install -f ${NAME} -v=${VER} --no-document
+    sudo bash -cl "${GEM} install -f ${NAME} -v=${VER} --no-document"
     # issue #128対応：特定バージョンのbundlerが必要。
     if [ "${NAME}" = "bundler" ]
     then

@@ -30,7 +30,7 @@ echo ""
 echo -n "データベース(全てのRedmineの情報)とリポジトリを削除しますか?(y/N)"
 read YN
 if [ "$YN" = "y" ]; then
-    DBCMD="mysql `db_option_root`"
+    DBCMD="sudo mysql `db_option_root`"
     ${DBCMD} alminium -e "REVOKE ALL ON alminium.* FROM alminium@%" \
              2>/dev/null
     ${DBCMD} alminium -e "REVOKE ALL ON alminium.* FROM alminium@localhost" \
@@ -38,7 +38,7 @@ if [ "$YN" = "y" ]; then
     ${DBCMD} alminium -e "DELETE FROM mysql.user WHERE User LIKE 'alminium'"
     ${DBCMD} alminium -e "FLUSH PRIVILEGES"
     ${DBCMD} alminium -e "DROP DATABASE alminium"
-    rm -fr ${ALM_INSTALL_DIR}/* ${ALM_INSTALL_DIR}/.[^.]*  ${ALM_VAR_DIR}/*
+    sudo rm -fr ${ALM_INSTALL_DIR}/* ${ALM_INSTALL_DIR}/.[^.]*  ${ALM_VAR_DIR}/*
 fi
 
 # remove apache2 config
@@ -46,10 +46,10 @@ echo ""
 echo -n "Apacheの設定を削除しますか?(y/N)"
 read YN
 if [ "$YN" = "y" ]; then
-    rm -fr /etc/httpd/conf.d/{alminium}.conf
-    rm -fr /etc/apache2/conf.d/{alminium}.conf
-    rm -fr /etc/apache2/sites-{available,enabled}/alminium.conf
-    rm -fr $ALM_ETC_DIR/*
+    sudo rm -fr /etc/httpd/conf.d/{alminium}.conf
+    sudo rm -fr /etc/apache2/conf.d/{alminium}.conf
+    sudo rm -fr /etc/apache2/sites-{available,enabled}/alminium.conf
+    sudo rm -fr $ALM_ETC_DIR/*
 fi
 
 # uninstall jenkins
@@ -65,5 +65,5 @@ echo ""
 echo -n "キャッシュされたファイルを削除しますか?(y/N)"
 read YN
 if [ "$YN" = "y" ]; then
-    rm -fr cache *.installed
+    sudo rm -fr cache *.installed
 fi

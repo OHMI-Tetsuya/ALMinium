@@ -51,7 +51,7 @@ Git Branch Hook| Gitのブランチでの作業をチケットに連動させま
 DMSF           | 文書管理
 OAuth Provider | OAuthプロバイダー(see https://github.com/suer/redmine_oauth_provider)
 OAuth GitLab   | GitLabアカウントでログイン(see https://github.com/applewu/redmine_omniauth_gitlab)
- 
+
 その他のプラグインついては、<a href="redmine/setup/redmine-plugins.lst">プラグインリストファイル</a>をご覧ください。  
 **インストールするプラグインを除外したい場合は、この[プラグインリストファイル](redmine/setup/redmine-plugins.lst)を編集し、不要なプラグインをコメントアウトしてください。**
 
@@ -67,13 +67,13 @@ OAuth GitLab   | GitLabアカウントでログイン(see https://github.com/app
 下記の通り実行すれば、ALMiniumのインストーラを実行できます。
 
 ```
- # yum install git 
+ $ sudo yum install git
 もしくは
- # apt-get install git
+ $ sudo apt-get install git
 
- # git clone https://github.com/alminium/alminium.git
- # cd alminium
- # bash ./smelt
+ $ git clone https://github.com/OHMI-Tetsuya/alminium.git
+ $ cd alminium
+ $ bash ./smelt
 ```
 
 たったのこれだけで、チケットシステム、バージョン管理システム、Redmineの様々なプラグインのインストール、連携設定を行うことができます。なお、smeltは、金属を溶解して製錬するという意味で、様々なソフトウェア/プラグインを混合してALMiniumを作成するという意味からとっています。
@@ -132,7 +132,7 @@ $ git clone http://ユーザ名@ホスト名/git/リポジトリ名
 $ cd リポジトリ名
 $ touch dummy.txt
 $ git add dummy.txt
-$ git commit -a -m "add dummy file." 
+$ git commit -a -m "add dummy file."
 $ git push
 ```
 
