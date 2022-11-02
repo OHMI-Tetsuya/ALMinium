@@ -71,7 +71,7 @@ OAuth GitLab   | GitLabアカウントでログイン(see https://github.com/app
 もしくは
  $ sudo apt-get install git
 
- $ git clone https://github.com/OHMI-Tetsuya/alminium.git
+ $ git clone https://github.com/OHMI-Tetsuya/ALMinium.git
  $ cd alminium
  $ bash ./smelt
 ```
