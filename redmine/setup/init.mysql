@@ -1,4 +1,4 @@
-charset utf8;
+charset utf8mb4;
 
 /*********************************************************************
  * トラッカーの設定
@@ -30,6 +30,7 @@ REPLACE INTO workflows (tracker_id,old_status_id,new_status_id,role_id)
  *        でないと動かなかったりする)
  *  下記重複問題は一旦削除して設定するように変更した
  ********************************************************************/
+/*
 DELETE FROM settings WHERE name='plugin_redmine_backlogs';
 REPLACE INTO settings(name,value,updated_on) VALUES ('plugin_redmine_backlogs','---
 :story_trackers:
@@ -43,6 +44,7 @@ REPLACE INTO settings(name,value,updated_on) VALUES ('plugin_redmine_backlogs','
 :wiki_template: \'\'
 :show_redmine_std_header: enabled
 :auto_assign_task: enabled\n',now());
+*/
 
 /*********************************************************************
  * Backlogsプラグインの設定が重複する問題に対応

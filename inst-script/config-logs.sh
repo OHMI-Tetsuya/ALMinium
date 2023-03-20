@@ -23,7 +23,7 @@ backup_and_new_logdir() {
       sudo bash -c "cp -p ${old_log_dir}/* ${ALM_LOG_DIR}/${new_log_dir}/"
     fi
     sudo rm -r ${old_log_dir}
-    sudo ln -s ${ALM_LOG_DIR}/${new_log_dir} ${parent_dir}/${old_log_dir}
+    sudo ln -s ${ALM_LOG_DIR}/${new_log_dir} ${parent_dir}/${old_log_dir} || fatal_error_exit ${BASH_SOURCE}
   fi
   sudo chown -R ${owner}:${group} ${ALM_LOG_DIR}/${new_log_dir}
   popd
@@ -31,23 +31,29 @@ backup_and_new_logdir() {
 
 # each log's configuration
 sudo mkdir -p ${ALM_LOG_DIR}
-sudo mkdir -p ${ALM_LOG_DIR}/redmine
-sudo mkdir -p ${ALM_LOG_DIR}/${APACHE_LOG_DIR}
-backup_and_new_logdir "${ALM_INSTALL_DIR}" "log" "redmine" "${APACHE_USER}" "${APACHE_USER}"
-backup_and_new_logdir "/var/log" "${APACHE_LOG_DIR}" "${APACHE_LOG_DIR}" "root" "root"
+##### #sudo chmod 666 ${ALM_LOG_DIR}
+##### sudo mkdir -p ${ALM_LOG_DIR}/redmine
+##### sudo chmod 666 ${ALM_LOG_DIR}/redmine
+##### sudo mkdir -p ${ALM_LOG_DIR}/${APACHE_LOG_DIR}
+##### backup_and_new_logdir "${ALM_INSTALL_DIR}" "log" "redmine" "${APACHE_USER}" "${APACHE_USER}"
+##### backup_and_new_logdir "/var/log" "${APACHE_LOG_DIR}" "${APACHE_LOG_DIR}" "root" "root"
+sudo ln -s  ${ALM_INSTALL_DIR}/log ${ALM_LOG_DIR}/redmine || fatal_error_exit ${BASH_SOURCE}
+sudo ln -s  /var/log/${APACHE_LOG_DIR} ${ALM_LOG_DIR}/${APACHE_LOG_DIR} || fatal_error_exit ${BASH_SOURCE}
 
 # jenkins log configuration
 if [ "${ALM_ENABLE_JENKINS}" = "y" ]; then
-  sudo mkdir -p ${ALM_LOG_DIR}/jenkins
-  backup_and_new_logdir "/var/log" "jenkins" "jenkins" "jenkins" "jenkins"
+#####   sudo mkdir -p ${ALM_LOG_DIR}/jenkins
+#####   backup_and_new_logdir "/var/log" "jenkins" "jenkins" "jenkins" "jenkins"
+  sudo ln -s  /var/log/jenkins ${ALM_LOG_DIR}/jenkins || fatal_error_exit ${BASH_SOURCE}
 fi
 
 # db log configuration
 if [ "${ALM_DB_SETUP}" = "y" -a "${ALM_USE_EXISTING_DB}" != "y" ]; then
-  sudo mkdir -p ${ALM_LOG_DIR}/${MYSQL_LOG_DIR}
-  backup_and_new_logdir "/var/log" "${MYSQL_LOG_DIR}" "${MYSQL_LOG_DIR}" "mysql" "adm"
+#####   sudo mkdir -p ${ALM_LOG_DIR}/${MYSQL_LOG_DIR}
+#####   backup_and_new_logdir "/var/log" "${MYSQL_LOG_DIR}" "${MYSQL_LOG_DIR}" "mysql" "adm"
+  sudo ln -s  /var/log/${MYSQL_LOG_DIR} ${ALM_LOG_DIR}/${MYSQL_LOG_DIR} || fatal_error_exit ${BASH_SOURCE}
   # ubuntu1604 apparmor setting
-  if [ "${APPARMOR_ENABLED}" != "" ]; then
-    sudo sed -i "s|/var/log/mysql/|/var/log/alminium/mysql/|" /etc/apparmor.d/usr.sbin.mysqld
-  fi
+#####   if [ "${APPARMOR_ENABLED}" != "" ]; then
+#####     sudo sed -i "s|/var/log/mysql/|/var/log/alminium/mysql/|" /etc/apparmor.d/usr.sbin.mysqld
+#####   fi
 fi

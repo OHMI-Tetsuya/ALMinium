@@ -20,6 +20,9 @@ ALM_DB_ROOT_PASS=${3:-${ALM_DB_ROOT_PASS}}
 # move to sources directry
 cd ${ALM_SRC_DIR}
 
+# include functions
+source inst-script/functions.sh
+
 # 実行ユーザーをチェック
 source inst-script/check-user.sh
 check_user ALMiniumのアップグレード
@@ -72,7 +75,7 @@ backup_conf() {
   local conf_name=$2
   local backup_dir=$3
   sudo mkdir ${backup_dir}/${conf_name}
-  sudo cp -pr ${conf_dir}/* ${backup_dir}/${conf_name}
+  sudo cp -pr ${conf_dir}/* ${backup_dir}/${conf_name} || fatal_error_exit ${BASH_SOURCE}
   sudo bash -c "echo \"these were stored in ${conf_dir}.\" > ${backup_dir}/${conf_name}/README.txt"
 }
 
@@ -141,4 +144,3 @@ restore_log jenkins
 
 echo ""
 echo "以上でアップグレードは終了です。途中にエラーが発生した場合は、元の状態に戻して手動でアップグレードを実施してください。"
-

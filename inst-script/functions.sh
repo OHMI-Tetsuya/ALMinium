@@ -32,9 +32,9 @@ db_exist_record() {
 db_update_setting() {
   if [ "`db_exist_record $1`" = "" ]; then
     echo "REPLACE INTO settings(name,value,updated_on) " \
-         "VALUES ('$1','$2', now());" | mysql `db_option` alminium
+         "VALUES ('$1','$2', now());" | mysql `db_option` alminium || fatal_error_exit ${BASH_SOURCE}
   else
-    echo "UPDATE settings SET value = '$2' WHERE name = '$1';" | mysql `db_option` alminium
+    echo "UPDATE settings SET value = '$2' WHERE name = '$1';" | mysql `db_option` alminium || fatal_error_exit ${BASH_SOURCE}
   fi
 }
 
@@ -51,3 +51,7 @@ db_test() {
   echo `sudo mysql ${OPT} -e "status" ${DB_NAME} 2>/dev/null`
 }
 
+fatal_error_exit () {
+    echo "Fatal error File:${1} Line No:${BASH_LINENO}"
+	exit 1
+}

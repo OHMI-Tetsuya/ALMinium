@@ -66,7 +66,7 @@ check_backup_result() {
   else
     echo "$2(${ALM_BACKUP_DIR}/$1)が失敗しました。"
     unset RESULT
-    exit 1
+    fatal_error_exit ${BASH_SOURCE}
   fi
 }
 
@@ -111,4 +111,3 @@ if [ "${ALM_BACKUP_EXPIRY}" != "" ]; then
        -mtime +${ALM_BACKUP_EXPIRY} -exec rm -f {} \;
 fi
 popd
-
