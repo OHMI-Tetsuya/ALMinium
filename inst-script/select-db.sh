@@ -15,8 +15,9 @@ if [ "${ALM_DB_SETUP}" = "y" ]; then
       echo -n 既に設置済みのMySQLデータベースサービスを利用しますか？[y/N]
       read ALM_USE_EXISTING_DB;
       if [ "${ALM_USE_EXISTING_DB}" = "y" ]; then
-        # db client install
-        source inst-script/${OS}/install_db_client.sh
+        ##### defaultでクライアントをインストールしているから削除
+        ##### # db client install
+        ##### source inst-script/${OS}/install_db_client.sh
         # DBへのアクセスが成功するまでループしながらチェック
         CHK_DB=
         while [ "${CHK_DB}" = "" ]; do

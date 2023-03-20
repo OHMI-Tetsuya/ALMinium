@@ -1,0 +1,57 @@
+#####apr-devel
+#####byacc
+#####curl
+#####  curl-devel
+#####db4-devel
+#####expat-devel
+gcc
+gcc-c++
+#####gdbm-devel
+#####gettext-devel
+#####glibc-devel
+httpd
+httpd-devel
+https://cbs.centos.org/kojifiles/packages/ipa-pgothic-fonts/003.03/15.el8/noarch/ipa-pgothic-fonts-003.03-15.el8.noarch.rpm
+ImageMagick
+ImageMagick-devel
+libcurl-devel
+#####  libffi-devel
+#####libical
+#####libuuid-devel
+#####libxml2-devel
+#####libxslt-devel
+#####libyaml-devel
+make
+#####mariadb
+#####mariadb-devel
+mercurial
+mod_dav_svn
+#mod_passenger
+mod_perl
+mysql
+mysql-devel
+#####ncurses-devel
+#####  openssl-devel
+#passenger
+#####patch
+perl-Digest-SHA
+#####perl-ExtUtils-MakeMaker
+#####pygpgme
+#####python-docutils
+python3-mod_wsgi
+#####  readline-devel
+#####rpm-build
+#####rpmdevtools
+ruby
+ruby-devel
+#rubygem-nokogiri
+#rubygem-rack
+#rubygem-rake
+#rubygem-rake-compiler
+#####sqlite-devel
+subversion
+sudo
+##### tcl-devel
+unzip
+wget
+#####  zlib-devel

@@ -23,27 +23,27 @@ do
           if [[ "${OS}" == "rhel6" ]]; then
             wget -P cache ${URL_NAME[$i]} --no-check-certificate
           else
-            wget -P cache ${URL_NAME[$i]}
+            wget -P cache ${URL_NAME[$i]} || fatal_error_exit ${BASH_SOURCE}
           fi
         fi
-        yes | unzip -q cache/${FILE_NAME}
-         rm -fr ${ALM_INSTALL_DIR}/plugins/${DEST_NAME[$i]}
+        yes | unzip -q cache/${FILE_NAME} || fatal_error_exit ${BASH_SOURCE}
+        rm -fr ${ALM_INSTALL_DIR}/plugins/${DEST_NAME[$i]}
         mv ${DIR_NAME[$i]} ${ALM_INSTALL_DIR}/plugins/${DEST_NAME[$i]}
         rm -f ${FILE_NAME}
         ;;
 
     tgz|gz)
         if [ ! -f cache/${FILE_NAME} ]; then
-          wget -P cache ${URL_NAME[$i]}
+          wget -P cache ${URL_NAME[$i]} || fatal_error_exit ${BASH_SOURCE}
         fi
-        tar zxf cache/${FILE_NAME}
+        tar zxf cache/${FILE_NAME} || fatal_error_exit ${BASH_SOURCE}
         rm -fr  ${ALM_INSTALL_DIR}/plugins/${DEST_NAME[$i]}
         mv ${DIR_NAME[$i]} ${ALM_INSTALL_DIR}/plugins/${DEST_NAME[$i]}
         rm -f ${FILE_NAME}
         ;;
     git)
         if [ ! -d cache/${DEST_NAME[$i]} ]; then
-          git clone ${URL_NAME[$i]} cache/${DEST_NAME[$i]}
+          git clone ${URL_NAME[$i]} cache/${DEST_NAME[$i]} || fatal_error_exit ${BASH_SOURCE}
         fi
         if [ -d cache/${DEST_NAME[$i]} ]; then
           cd cache/${DEST_NAME[$i]}
@@ -86,30 +86,30 @@ pushd ${ALM_INSTALL_DIR}
 # NOTE: use nokogiri 1.6.x because of jenkins_api_alient v1.3.0 
 #       which is used by redmine_jenkins, and use rubyzip latest
 # DMSF
-sed -i.org -e "s/gem 'rubyzip',/#gem 'rubyzip',/" \
-           -e "s/gem 'nokogiri'/#gem 'nokogiri'/" \
-    plugins/redmine_dmsf/Gemfile
-sed -i.org "s/label_dmsf_workflow_plural/label_dmsf_workflow_plural,\n      :html => {:class => 'icon dmsf_approvalworkflows'}/" \
-    plugins/redmine_dmsf/init.rb
+##### sed -i.org -e "s/gem 'rubyzip',/#gem 'rubyzip',/" \
+#####            -e "s/gem 'nokogiri'/#gem 'nokogiri'/" \
+#####     plugins/redmine_dmsf/Gemfile
+##### sed -i.org "s/label_dmsf_workflow_plural/label_dmsf_workflow_plural,\n      :html => {:class => 'icon dmsf_approvalworkflows'}/" \
+#####     plugins/redmine_dmsf/init.rb
 ## oauth_provider
 #sed -i.org "s/oauth_client_applications/oauth_client_applications, :html => {:class => 'icon oauth_clients'}/" \
 #    plugins/redmine_oauth_provider/init.rb
 # redmine_xls_export
-sed -i.org -e 's/gem "nokogiri/#gem "nokogiri/' \
-    plugins/redmine_xls_export/Gemfile
+##### sed -i.org -e 's/gem "nokogiri/#gem "nokogiri/' \
+#####     plugins/redmine_xls_export/Gemfile
 # redmine_backlogs
-sed -i.org -e 's/gem "nokogiri"/gem "nokogiri", "~> 1.6.0" #/' \
-           -e 's/gem "prawn"/gem "prawn", "~>2.0.0"/' \
-    plugins/redmine_backlogs/Gemfile
+##### sed -i.org -e 's/gem "nokogiri"/gem "nokogiri", "~> 1.6.0" #/' \
+#####            -e 's/gem "prawn"/gem "prawn", "~>2.0.0"/' \
+#####     plugins/redmine_backlogs/Gemfile
 # redmine
-sed -i.org -e 's/gem "nokogiri"/gem "nokogiri", "~> 1.6.0" #/' \
-           -e "s/gem 'tzinfo-data',/gem 'tzinfo-data' #,/" \
-    Gemfile
+##### sed -i.org -e 's/gem "nokogiri"/gem "nokogiri", "~> 1.6.0" #/' \
+#####            -e "s/gem 'tzinfo-data',/gem 'tzinfo-data' #,/" \
+#####     Gemfile
 # code_review
-sed -i.org 's/textile.js/markdown.js/' plugins/redmine_code_review/app/views/code_review/_html_header.html.erb
+##### sed -i.org 's/textile.js/markdown.js/' plugins/redmine_code_review/app/views/code_review/_html_header.html.erb
 # banner
-sed -i.org "s/:redmine_banner, /'icon redmine_banner', /" \
-    plugins/redmine_banner/init.rb
+##### sed -i.org "s/:redmine_banner, /'icon redmine_banner', /" \
+#####     plugins/redmine_banner/init.rb
 
 # for OAuth2認証
 cd ./plugins
@@ -131,4 +131,3 @@ cd ..
 
 # ディレクトリを元に戻す
 popd
-

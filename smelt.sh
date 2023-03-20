@@ -11,7 +11,7 @@ ALM_INSTALL_DIR=${ALM_INSTALL_DIR:-/opt/alminium}
 ALM_LOG_DIR=${ALM_LOG_DIR:-/var/log/alminium}
 
 ALM_ENABLE_AUTO_BACKUP=${ALM_ENABLE_AUTO_BACKUP:-y}
-ALM_GIT_VERSION=${ALM_GIT_VERSION:-2.9.0}
+ALM_GIT_VERSION=${ALM_GIT_VERSION:-2.40.0}
 ALM_GIT_AUTO_UPGRADE=${ALM_GIT_AUTO_UPGRADE:-N}
 ALM_DB_SETUP=${ALM_DB_SETUP:-y}
 ALM_DB_HOST=${1:-$ALM_DB_HOST}
@@ -52,14 +52,6 @@ source inst-script/config-alminium.sh
 # 一時データ保存場所確保
 mkdir -p ${ALM_SRC_DIR}/cache
 
-# update submodules
-if [ $(git config -l | egrep 'submodule.+url=' | wc -l) -ne \
-     $(grep submodule .gitmodules | wc -l) ]; then
-  git submodule init
-fi
-git submodule sync
-git submodule update
-
 # select db
 source inst-script/select-db.sh
 
@@ -75,12 +67,6 @@ source inst-script/install-redmine.sh
 # post install
 echo "*** run post-install script ***"
 source inst-script/post-install.sh
-
-# setup for SUBDIRECTORY
-if [ "${ALM_SUBDIR}" != "" ]; then
-  sudo ln -sf ${ALM_INSTALL_DIR}/public /var/www/html${ALM_SUBDIR}
-  echo ${ALM_SUBDIR} > ${ALM_INSTALL_DIR}/subdirname
-fi
 
 # プロジェクト作成時に自動的にリポジトリを作成するときに利用
 #CHK=`egrep "reposman" /var/spool/cron/root`
@@ -100,6 +86,14 @@ fi
 
 # config log directories
 source inst-script/config-logs.sh
+
+# 権限設定
+# change the owner and group of the installation directory.
+echo "*** set authorities ***"
+sudo chown -R ${APACHE_USER}: ${ALM_INSTALL_DIR}/ || fatal_error_exit ${BASH_SOURCE}
+
+ # restart service
+source inst-script/service-restart.sh
 
 # smelt completed
 if [ "${ALM_UPGRADE}" != "y" ]; then

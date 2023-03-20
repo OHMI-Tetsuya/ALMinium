@@ -9,16 +9,18 @@ if [ "`which git`" = "" ]; then
   echo 処理を終了します。
   exit 1
 else
-  GIT_VER=`git --version | cut -c 13-15`
+#  GIT_VER=`git --version | cut -c 13-15`
+  GIT_VER=$(git --version | cut -c 13- | (IFS=. read -r major minor build revision; printf "%2d%02d%02d%02d" ${major:-0} ${minor:-0} ${build:-0} ${revision:-0}))
   # 古いgitのときはアップグレード
-  if [ `echo "${GIT_VER} >= 1.9" | bc` = 0 ]; then
+#  if [ `echo "${GIT_VER} >= 1.9" | bc` = 0 ]; then
+  if [ ${GIT_VER} -lt 02390200 ]; then
     if [ ${ALM_GIT_AUTO_UPGRADE} = 'y' ]; then
       GIT_UPDATE=y
     else
       echo
       echo
       echo gitのバージョンが古いためALMiniumが正しく動作しない可能性があります。
-      echo 本ソフトウェアでは version1.9以上を推奨しています。
+      echo 本ソフトウェアでは version2.39.2以上を推奨しています。
       echo gitのバージョンを${ALM_GIT_VERSION}にアップグレードしても良い場合は'y'を
       echo さもなくば'N'を選択してください。
       echo 'N'を選択した場合は、ALMiniumインストールした後、

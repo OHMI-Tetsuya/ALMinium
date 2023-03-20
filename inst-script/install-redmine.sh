@@ -11,14 +11,14 @@ download_redmine() {
   sudo mkdir -p ${ALM_INSTALL_DIR}
   sudo chown -R `whoami`: ${ALM_INSTALL_DIR}
   cd cache
-  wget ${RM_ARC}
-  tar zxf ${RM_VER}.tar.gz
+  wget ${RM_ARC} || fatal_error_exit ${BASH_SOURCE}
+  tar zxf ${RM_VER}.tar.gz || fatal_error_exit ${BASH_SOURCE}
   cd ..
   cp -fr cache/redmine-${RM_VER}/* ${ALM_INSTALL_DIR}/
   rm -fr cache/redmine-${RM_VER}
-  # redmine_backlogsプラグイン利用時にプロジェクトチケットリスト
-  # 表示エラーになる問題に対処
-  patch_for_issues_26637
+  ##### # redmine_backlogsプラグイン利用時にプロジェクトチケットリスト
+  ##### # 表示エラーになる問題に対処
+  ##### patch_for_issues_26637
 }
 
 # patch to  http://www.redmine.org/issues/26637
@@ -79,15 +79,16 @@ install_gems() {
   fi
 
   # redmineに必要なgemをインストール
-  ${BUNDLER} install --path vendor/bundle \
-               --without development test postgresql sqlite xapian
+  ${BUNDLER} config set --local path 'vendor/bundle' || fatal_error_exit ${BASH_SOURCE}
+  ${BUNDLER} config set --local without 'development test postgresql sqlite xapian' || fatal_error_exit ${BASH_SOURCE}
+  ${BUNDLER} install || fatal_error_exit ${BASH_SOURCE}
   popd
 }
 
 # create secret token
 create_redmine_token() {
   pushd ${ALM_INSTALL_DIR}
-  ${BUNDLER} exec rake generate_secret_token
+  ${BUNDLER} exec rake generate_secret_token || fatal_error_exit ${BASH_SOURCE}
   popd
 }
 
@@ -125,8 +126,9 @@ echo "** install hooks **"
 setup_hooks
 
 # install plugins
-echo "** install redmine plugins **"
-source redmine/setup/install-plugins.sh
+### redmine5.0対応 暫定的にプラグインのセットアップを無効
+### echo "** install redmine plugins **"
+### source redmine/setup/install-plugins.sh
 
 echo "** install gems **"
 install_gems
@@ -138,14 +140,16 @@ create_redmine_token
 echo "** setup redmine db **"
 setup_db
 
-if [ "${ALM_ENABLE_JENKINS}" = "y" -o "${JENKINS_INSTALLED}" = "y" ]; then
-  echo "instll redmine pluguins for jenkins **"
-  # jenkins関連プラグイン
-  # この位置でインストールしないとエラーになる
-  source redmine/setup/install-plugins-jenkins.sh
-fi
+### redmine5.0対応 暫定的にjenkinsのセットアップを無効
+### if [ "${ALM_ENABLE_JENKINS}" = "y" -o "${JENKINS_INSTALLED}" = "y" ]; then
+###   echo "instll redmine pluguins for jenkins **"
+###   # jenkins関連プラグイン
+###   # この位置でインストールしないとエラーになる
+###   source redmine/setup/install-plugins-jenkins.sh
+### fi
 
-echo "** set authorities **"
+### 権限設定をsmelt.shに移動
+#echo "** set authorities **"
 # 権限設定
 #chown -R ${APACHE_USER}:${APACHE_USER} ${ALM_INSTALL_DIR}/*
-sudo usermod -aG `id -gn \`whoami\`` ${APACHE_USER}
+#sudo usermod -aG `id -gn \`whoami\`` ${APACHE_USER}

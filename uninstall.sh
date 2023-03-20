@@ -8,6 +8,7 @@ ALM_SRC_DIR=$(cd $(dirname $0);pwd)
 ALM_ETC_DIR=${ALM_ETC_DIR:-/etc/opt/alminium}
 ALM_VAR_DIR=${ALM_VAR_DIR:-/var/opt/alminium}
 ALM_INSTALL_DIR=${ALM_INSTALL_DIR:-/opt/alminium}
+ALM_LOG_DIR=${ALM_LOG_DIR:-/var/log/alminium}
 
 ALM_DB_HOST=${1:-${ALM_DB_HOST}}
 ALM_DB_HOST=${ALM_DB_HOST:-localhost}
@@ -21,6 +22,9 @@ cd ${ALM_SRC_DIR}
 
 # include functions
 source inst-script/functions.sh
+
+# OSを確認
+source inst-script/check-os.sh
 
 # start uninstall
 echo "ALMiniumをアンインストールします。"
@@ -38,7 +42,10 @@ if [ "$YN" = "y" ]; then
     ${DBCMD} alminium -e "DELETE FROM mysql.user WHERE User LIKE 'alminium'"
     ${DBCMD} alminium -e "FLUSH PRIVILEGES"
     ${DBCMD} alminium -e "DROP DATABASE alminium"
-    sudo rm -fr ${ALM_INSTALL_DIR}/* ${ALM_INSTALL_DIR}/.[^.]*  ${ALM_VAR_DIR}/*
+    if [ -f ${ALM_INSTALL_DIR}/subdirname ]; then
+        sudo rm -f /var/www/html`cat ${ALM_INSTALL_DIR}/subdirname`
+    fi
+    sudo rm -fr ${ALM_INSTALL_DIR}/* ${ALM_INSTALL_DIR}/.[^.]* ${ALM_VAR_DIR}/* ${ALM_LOG_DIR}/redmine /etc/logrotate.d/alminium
 fi
 
 # remove apache2 config
@@ -46,10 +53,8 @@ echo ""
 echo -n "Apacheの設定を削除しますか?(y/N)"
 read YN
 if [ "$YN" = "y" ]; then
-    sudo rm -fr /etc/httpd/conf.d/{alminium}.conf
-    sudo rm -fr /etc/apache2/conf.d/{alminium}.conf
-    sudo rm -fr /etc/apache2/sites-{available,enabled}/alminium.conf
-    sudo rm -fr $ALM_ETC_DIR/*
+    sudo rm -fr $ALM_ETC_DIR/* ${APACHE_SITE_CONF_DIR}/alminium.conf ${APACHE_CONF_DIR}/passenger.conf
+    sudo rm -fr /etc/apache2/sites-enabled/alminium.conf
 fi
 
 # uninstall jenkins
@@ -67,3 +72,6 @@ read YN
 if [ "$YN" = "y" ]; then
     sudo rm -fr cache *.installed
 fi
+
+# restart service
+source inst-script/service-restart.sh

@@ -4,7 +4,7 @@
 echo オペレーティングシステムをチェックします。
 
 #IPアドレス確認用文字列
-ETH0=${ETH0:-eth0}
+ETH0=${ETH0:-enp0s3}
 
 # check OS
 if [ "${OS}" = "" ]; then
@@ -14,35 +14,30 @@ if [ "${OS}" = "" ]; then
     APACHE_SITE_CONF_DIR=${APACHE_CONF_DIR}
     APACHE_LOG_DIR=httpd
     MYSQL_LOG_DIR=mysql
-    MYSQLD='/etc/init.d/mysqld'
-    CHK=`egrep "CentOS release 5|Red Hat Enterprise Linux .* 5" /etc/redhat-release`
+### not use ###    MYSQLD='systemctl mysqld.service'
+    CHK=`grep PLATFORM_ID=\"platform:el9\" /etc/os-release`
     if [ "${CHK}" != '' ]; then
-        OS='rhel5'
-        echo "RHEL 5.x / CentOS 5.x / OEL 5.xが検出されました。"
-        echo "RHEL 5.x / CentOS 5.x / OEL 5.xは、サポートされていません。"
-        echo "インストールを中止します。"
-        exit 1
+        OS='rhel9'
+        OS_NAME=$(grep -oP '(?<=PRETTY_NAME=").*(?=")' /etc/os-release)
+        if [ "${OS_NAME}" = '' ]; then
+            OS_NAME="CentOS 9.x"
+        fi
+        echo "${OS_NAME} が検出されました。"
+    fi
+    CHK=`grep PLATFORM_ID=\"platform:el8\" /etc/os-release`
+    if [ "${CHK}" != '' ]; then
+        OS='rhel8'
+        OS_NAME=$(grep -oP '(?<=PRETTY_NAME=").*(?=")' /etc/os-release)
+        if [ "${OS_NAME}" = '' ]; then
+            OS_NAME="CentOS 8.x"
+        fi
+        echo "${OS_NAME} が検出されました。"
     fi
     CHK=`egrep "CentOS Linux release 7" /etc/redhat-release`
     if [ "${CHK}" != '' ]; then
         OS='rhel7'
         echo "CentOS 7.x が検出されました。"
-        MYSQL_LOG_DIR=mariadb
-        MYSQLD='service mariadb'
-        ETH0=enp0s3
-    else
-        OS='rhel6'
-        echo "CentOS 6.xが検出されました。"
     fi
-  elif [ -f /etc/debian_version -a "`grep 14.04 /etc/issue`" != "" ]; then
-    APACHE_USER=www-data
-    APACHE_CONF_DIR=/etc/apache2/mods-enabled
-    APACHE_SITE_CONF_DIR=/etc/apache2/sites-available
-    APACHE_LOG_DIR=apache2
-    MYSQL_LOG_DIR=mysql
-    MYSQLD='/etc/init.d/mysql'
-    OS='debian'
-    echo "Ubuntu 14.04 が検出されました。"
   elif [ -f /etc/lsb-release ]; then
     APACHE_USER=www-data
     APACHE_CONF_DIR=/etc/apache2/mods-enabled
@@ -50,24 +45,25 @@ if [ "${OS}" = "" ]; then
     APACHE_LOG_DIR=apache2
     MYSQL_LOG_DIR=mysql
     MYSQLD='/etc/init.d/mysql'
-    ETH0=enp0s3
-    if [ "`grep 16.04 /etc/lsb-release`" != "" ]; then
-      OS='ubuntu1604'
-      echo "Ubuntu 16.04 が検出されました。"
-    elif [ "`grep 17.10 /etc/lsb-release`" != "" ]; then
-      OS='ubuntu1710'
-      echo "17.10 が検出されました。"
-    elif [ "`grep 18.04 /etc/lsb-release`" != "" ]; then
+    if [ "`grep 18.04 /etc/lsb-release`" != "" ]; then
       OS='ubuntu1804'
       echo "18.04 が検出されました。"
+    fi
+    if [ "`grep 20.04 /etc/lsb-release`" != "" ]; then
+      OS='ubuntu2004'
+      echo "20.04 が検出されました。"
+    fi
+    if [ "`grep 22.04 /etc/lsb-release`" != "" ]; then
+      OS='ubuntu2204'
+      echo "22.04 が検出されました。"
     fi
   fi
 fi
 if [ "${OS}" = "" ]; then
   echo "サポートされていないOSです。"
   echo "現在サポートされいているOSは、"
-  echo "  * Ubuntu 14.04/16.04/17.10/18.04"
-  echo "  * CentOS 6.0/7.0"
+  echo "  * Ubuntu 18.04/20.04/22.04"
+  echo "  * RHEL 7/8/9"
   echo "です。処理を中止します。"
   exit 1
 fi

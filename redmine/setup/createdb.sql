@@ -1,3 +1,4 @@
-CREATE DATABASE alminium DEFAULT CHARACTER SET utf8;
-GRANT ALL PRIVILEGES ON alminium.* TO 'alminium'@'localhost' IDENTIFIED BY 'alminium';
-GRANT ALL PRIVILEGES ON alminium.* TO 'alminium'@'%' IDENTIFIED BY 'alminium';
+CREATE DATABASE alminium CHARACTER SET utf8mb4;
+CREATE USER 'alminium'@'localhost' IDENTIFIED BY 'alminium';
+GRANT ALL PRIVILEGES ON alminium.* TO 'alminium'@'localhost';
+FLUSH PRIVILEGES;

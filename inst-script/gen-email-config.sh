@@ -31,4 +31,3 @@ case "${SMTPSET}" in
 	
 	* ) ;;
 esac
-

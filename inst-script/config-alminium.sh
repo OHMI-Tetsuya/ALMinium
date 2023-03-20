@@ -73,46 +73,49 @@ fi
 # source inst-script/config-email.sh
 
 # jenkins
-if [ "${ALM_UPGRADE}" != "y" -a "${ALM_ENABLE_JENKINS}" = "" ]; then
-  echo -n "継続的インテグレーションツールのJenkinsのインストール・設定を"
-  echo -n "行うことができます。デフォルトはインストールしません。"
-  echo -n "よく分からなければNを選択してください。"
-  echo -n ""
-  echo -n "Jenkinsをインストールしますか?(y/N)"
-  read ALM_ENABLE_JENKINS
-  echo ""
-fi
+### redmine5.0対応 暫定的にjenkinsのセットアップを無効
+### if [ "${ALM_UPGRADE}" != "y" -a "${ALM_ENABLE_JENKINS}" = "" ]; then
+###   echo -n "継続的インテグレーションツールのJenkinsのインストール・設定を"
+###   echo -n "行うことができます。デフォルトはインストールしません。"
+###   echo -n "よく分からなければNを選択してください。"
+###   echo -n ""
+###   echo -n "Jenkinsをインストールしますか?(y/N)"
+###   read ALM_ENABLE_JENKINS
+###   echo ""
+### fi
 
 # OAuth2認証
-if [ "${ALM_OAUTH2_METHOD}" = "" ]; then
-  echo "### 本機能は実験中（動作確認が不十分）です ###"
-  echo "OAuth2認証サービス(プロバイダ)を選択してください:"
-  echo "  1: Google"
-  echo "  2: GitHub"
-  echo "  3: GitLab (オンプレミスサービスも指定可能)"
-  echo "  4: Azure"
-  echo "  other: OAuth2認証を利用しない"
-  echo -n "利用したいサービスの番号をお選びください: "
-  read ALM_OAUTH2_METHOD
-  if [ "${ALM_OAUTH2_METHOD}" = "" ] ; then
-    ALM_OAUTH2_METHOD="N"
-  fi
-fi
-case ${ALM_OAUTH2_METHOD} in
-1)
-  ALM_OAUTH2_METHOD=google
-  ;;
-2)
-  ALM_OAUTH2_METHOD=github
-  ;;
-3)
-  ALM_OAUTH2_METHOD=gitlab
-  ;;
-4)
-  ALM_OAUTH2_METHOD=azure
-  ;;
-*)
+### redmine5.0対応 暫定的にOAuth2認証のセットアップを無効
+### たぶんredmine5.0から本体にこの機能がある
+### if [ "${ALM_OAUTH2_METHOD}" = "" ]; then
+###   echo "### 本機能は実験中（動作確認が不十分）です ###"
+###   echo "OAuth2認証サービス(プロバイダ)を選択してください:"
+###   echo "  1: Google"
+###   echo "  2: GitHub"
+###   echo "  3: GitLab (オンプレミスサービスも指定可能)"
+###   echo "  4: Azure"
+###   echo "  other: OAuth2認証を利用しない"
+###   echo -n "利用したいサービスの番号をお選びください: "
+###   read ALM_OAUTH2_METHOD
+###   if [ "${ALM_OAUTH2_METHOD}" = "" ] ; then
+###     ALM_OAUTH2_METHOD="N"
+###   fi
+### fi
+### case ${ALM_OAUTH2_METHOD} in
+### 1)
+###   ALM_OAUTH2_METHOD=google
+###   ;;
+### 2)
+###   ALM_OAUTH2_METHOD=github
+###   ;;
+### 3)
+###   ALM_OAUTH2_METHOD=gitlab
+###   ;;
+### 4)
+###   ALM_OAUTH2_METHOD=azure
+###   ;;
+### *)
   ALM_OAUTH2_METHOD=N
-  ;;
-esac
+###   ;;
+### esac
 

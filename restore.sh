@@ -20,6 +20,9 @@ ALM_DB_ROOT_PASS=${3:-${ALM_DB_ROOT_PASS}}
 
 ALM_DEAULT_BACKUP_DIR=/var/opt/alminium-backup
 
+# include functions
+source inst-script/functions.sh
+
 # 実行ユーザーをチェック
 source inst-script/check-user.sh
 check_user ALMiniumのリストア
@@ -54,7 +57,7 @@ fi
 # リストア用一時ディレクトリ
 ALM_RESTORE_TMP_DIR=${ALM_BACKUP_DIR}/tmp
 if [ ! -d "${ALM_RESTORE_TMP_DIR}" ]; then
-  sudo mkdir "${ALM_RESTORE_TMP_DIR}"
+  sudo mkdir "${ALM_RESTORE_TMP_DIR}" || fatal_error_exit ${BASH_SOURCE}
 fi
 
 # リストア用一時ファイル
@@ -64,9 +67,6 @@ ALM_REPOS_BACKUP=${ALM_RESTORE_TMP_DIR}/repo.tar.gz
 
 # move to sources directry
 cd ${ALM_SRC_DIR}
-
-# include functions
-source inst-script/functions.sh
 
 # バックアップの復元
 echo "${ALM_BACKUP_FILE_PATH}を復元します。"
@@ -109,9 +109,12 @@ if [ "${ALM_DB_BACKUP}" != "no" ]; then
   #データベースのマイグレーション
   echo "データベースのマイグレーションを実施します。"
   cd ${ALM_INSTALL_DIR}
-  sudo bash -cl "${BUNDLER} exec rake db:migrate RAILS_ENV=production"
-  sudo bash -cl "${BUNDLER} exec rake redmine:plugins:migrate RAILS_ENV=production"
-  bash -cl "${BUNDLER} exec rake tmp:cache:clear RAILS_ENV=production"
+#  sudo bash -cl "${BUNDLER} exec rake db:migrate RAILS_ENV=production"
+#  sudo bash -cl "${BUNDLER} exec rake redmine:plugins:migrate RAILS_ENV=production"
+#  sudo bash -cl "${BUNDLER} exec rake tmp:cache:clear RAILS_ENV=production"
+  sudo -u ${APACHE_USER} ${BUNDLER} exec rake db:migrate RAILS_ENV=production || fatal_error_exit ${BASH_SOURCE}
+  sudo -u ${APACHE_USER} ${BUNDLER} exec rake redmine:plugins:migrate RAILS_ENV=production || fatal_error_exit ${BASH_SOURCE}
+  sudo -u ${APACHE_USER} ${BUNDLER} exec rake tmp:cache:clear RAILS_ENV=production || fatal_error_exit ${BASH_SOURCE}
   #${BUNDLER} exec rake tmp:sessions:clear RAILS_ENV=production
   if [ $? -ne 0 ]; then
     echo "データベースのマイグレーションに失敗しました。"
@@ -127,4 +130,3 @@ if [ -f inst-script/service-restart.sh ]; then
 else
   echo "サービスを再起動してください。"
 fi
-

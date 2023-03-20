@@ -7,4 +7,3 @@ check_user() {
     exit 1
   fi
 }
-

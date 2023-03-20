@@ -21,7 +21,7 @@ do
   RET=$?
 done
 sudo sed -i.org "s/<useSecurity>true/<useSecurity>false/" /var/lib/jenkins/config.xml
-sudo service jenkins restart
+sudo systemctl restart jenkins.service || fatal_error_exit ${BASH_SOURCE}
 
 # Jenkinsの設定を自動で進めるために初期ログインとアクセス権設定を手動で実施
 #echo "## Jenkinsの設定を継続するため以下を実施してください"
@@ -86,7 +86,7 @@ if [ x"$http_proxy" != x"" ]; then
     echo "proxy setting for jenkins fail"
     exit 1
   fi
-  sudo service jenkins restart
+  sudo systemctl restart jenkins.service || fatal_error_exit ${BASH_SOURCE}
 fi
 
 echo セキュリティ解除
@@ -138,7 +138,7 @@ rm -rf tmp
 
 # persona-hudmi取得
 if [ ! -d /var/lib/jenkins/persona ]; then
-  sudo git clone https://github.com/okamototk/jenkins-persona-hudmi /var/lib/jenkins/persona
+  sudo bash -cl "git clone https://github.com/okamototk/jenkins-persona-hudmi /var/lib/jenkins/persona" || fatal_error_exit ${BASH_SOURCE}
 fi
 
 # 設定ファイルを配置
@@ -148,7 +148,7 @@ fi
 sudo chown -R jenkins:jenkins /var/lib/jenkins/
 
 # Jenkins再起動
-sudo service jenkins restart
+sudo systemctl restart jenkins.service || fatal_error_exit ${BASH_SOURCE}
 
 # 初期化時間を見越して少し待つ
 echo "Jenkins初期化中..."
@@ -168,4 +168,3 @@ echo "## 6. 「保存」ボタンを押下"
 echo "※上記設定等、正常に行われたことを確認した後、適切な権限設定を行った上で、運用してください。"
 echo "## インストール処理を継続するために、何らかのキーを押下してください。"
 read PROCEED
-
