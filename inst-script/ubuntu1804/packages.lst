@@ -11,24 +11,25 @@ libapache2-mod-wsgi
 libapache2-mod-svn
 libapr1-dev
 libaprutil1-dev
-libauthen-simple-ldap-perl
+########## libauthen-simple-ldap-perl
 libcurl4-openssl-dev
 libdbd-mysql-perl
 libdbi-perl
-libio-socket-ssl-perl
-libmagickcore-dev
-libmagickwand-dev
+########## libio-socket-ssl-perl
+########## libmagickcore-dev
+########## libmagickwand-dev
 libmysqlclient-dev
-libsqlite3-dev
+########## libsqlite3-dev
 libssl-dev
 make
 mercurial
 mysql-client
 #passenger
-php-mysql
-ruby
-ruby-dev
+##### php-mysql
+##### ruby
+##### ruby-dev
 #ruby-passenger
 subversion
+#subversion-tools
 unzip
 wget
