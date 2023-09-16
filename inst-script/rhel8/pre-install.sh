@@ -25,7 +25,14 @@ if [ "${RUBY_LOCAL_INSTALL}" = "y" -o "${RUBY_LOCAL_INSTALL}" = "Y" ]; then
 #  sudo dnf install -y zlib zlib-devel gcc-c++ patch readline readline-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel || fatal_error_exit ${BASH_SOURCE}
 #  sudo dnf install -y zlib zlib-devel gcc-c++ patch readline readline-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel || fatal_error_exit ${BASH_SOURCE}
   sudo dnf install -y gcc patch bzip2 openssl-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel || fatal_error_exit ${BASH_SOURCE}
-  sudo dnf install -y --enablerepo=powertools libyaml-devel || fatal_error_exit ${BASH_SOURCE}
+  if [ "`echo \"${OS_NAME}\" | grep \"MIRACLE LINUX\"`" != "" ]; then
+    sudo dnf update miraclelinux-repos || fatal_error_exit ${BASH_SOURCE}
+    sudo dnf config-manager --set-enabled 8-latest-PowerTools || fatal_error_exit ${BASH_SOURCE}
+    sudo dnf upgrade -y || fatal_error_exit ${BASH_SOURCE}
+    sudo dnf install -y libyaml-devel || fatal_error_exit ${BASH_SOURCE}
+  else
+    sudo dnf install -y --enablerepo=powertools libyaml-devel || fatal_error_exit ${BASH_SOURCE}
+  fi
   source inst-script/install-rbenv-ruby.sh
 elif [ "${RUBY_PKG_INSTALL}" = "y" -o "${RUBY_PKG_INSTALL}" = "Y" ]; then
   if [ "${DNF_MODULE_SETTING_RUBY}" != "n" -a "${DNF_MODULE_SETTING_RUBY}" != "N" ]; then
@@ -42,7 +49,12 @@ fi
 #fi
 
 # 必要なパッケージをインストール
-sudo dnf install -y epel-release || fatal_error_exit ${BASH_SOURCE}
+if [ "`echo \"${OS_NAME}\" | grep \"MIRACLE LINUX\"`" != "" ]; then
+  sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm || fatal_error_exit ${BASH_SOURCE}
+else
+  sudo dnf install -y epel-release || fatal_error_exit ${BASH_SOURCE}
+fi
+
 sudo dnf upgrade -y || fatal_error_exit ${BASH_SOURCE}
 #curl --fail -sSLo /etc/yum.repos.d/passenger.repo https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
 sudo dnf install -y `grep -v "^#" inst-script/${OS}/packages.lst` || fatal_error_exit ${BASH_SOURCE}
