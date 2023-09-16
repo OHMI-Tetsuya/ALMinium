@@ -16,10 +16,24 @@ fi
 # モジュールのバージョンを設定
 sudo dnf module reset -q -y mysql || fatal_error_exit ${BASH_SOURCE}
 sudo dnf module enable -y mysql:8.0 || fatal_error_exit ${BASH_SOURCE}
-sudo dnf module reset -q -y ruby || fatal_error_exit ${BASH_SOURCE}
-sudo dnf module enable -y ruby:3.0 || fatal_error_exit ${BASH_SOURCE}
 sudo dnf module reset -q -y subversion || fatal_error_exit ${BASH_SOURCE}
 sudo dnf module enable -y subversion:1.14 || fatal_error_exit ${BASH_SOURCE}
+
+# ruby
+if [ "${RUBY_LOCAL_INSTALL}" = "y" -o "${RUBY_LOCAL_INSTALL}" = "Y" ]; then
+  # install build dependencies
+#  sudo dnf install -y zlib zlib-devel gcc-c++ patch readline readline-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel || fatal_error_exit ${BASH_SOURCE}
+#  sudo dnf install -y zlib zlib-devel gcc-c++ patch readline readline-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel || fatal_error_exit ${BASH_SOURCE}
+  sudo dnf install -y gcc patch bzip2 openssl-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel || fatal_error_exit ${BASH_SOURCE}
+  sudo dnf install -y --enablerepo=powertools libyaml-devel || fatal_error_exit ${BASH_SOURCE}
+  source inst-script/install-rbenv-ruby.sh
+elif [ "${RUBY_PKG_INSTALL}" = "y" -o "${RUBY_PKG_INSTALL}" = "Y" ]; then
+  if [ "${DNF_MODULE_SETTING_RUBY}" != "n" -a "${DNF_MODULE_SETTING_RUBY}" != "N" ]; then
+    sudo dnf module reset -q -y ruby || fatal_error_exit ${BASH_SOURCE}
+    sudo dnf module enable -y ruby:${ALM_RHEL8_PKG_INSTALL_RUBY_VERSION} || fatal_error_exit ${BASH_SOURCE}
+  fi
+  sudo dnf install -y ruby ruby-devel || fatal_error_exit ${BASH_SOURCE}
+fi
 
 # 古いpassenger設定を削除する
 #if [ "`ls /etc/httpd/conf.d/passenger.conf 2>/dev/null`" != "" \

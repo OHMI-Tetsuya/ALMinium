@@ -11,13 +11,18 @@ ALM_INSTALL_DIR=${ALM_INSTALL_DIR:-/opt/alminium}
 ALM_LOG_DIR=${ALM_LOG_DIR:-/var/log/alminium}
 
 ALM_ENABLE_AUTO_BACKUP=${ALM_ENABLE_AUTO_BACKUP:-y}
-ALM_GIT_VERSION=${ALM_GIT_VERSION:-2.40.0}
+ALM_GIT_VERSION=${ALM_GIT_VERSION:-2.39.3}
 ALM_GIT_AUTO_UPGRADE=${ALM_GIT_AUTO_UPGRADE:-N}
 ALM_DB_SETUP=${ALM_DB_SETUP:-y}
 ALM_DB_HOST=${1:-$ALM_DB_HOST}
 ALM_DB_ROOT_PASS=${2:-$ALM_DB_ROOT_PASS}
+ALM_RUBY_GE_VERSION=${ALM_RUBY_GE_VERSION:-2.7.0}
+ALM_RUBY_GE_VER_NUM=${ALM_RUBY_GE_VER_NUM:-`echo ${ALM_RUBY_GE_VERSION} | (IFS=. read -r major minor build; printf "%2d%02d%02d" ${major:-0} ${minor:-0} ${build:-0})`}
+ALM_RUBY_LT_VERSION=${ALM_RUBY_LT_VERSION:-3.2.0}
+ALM_RUBY_LT_VER_NUM=${ALM_RUBY_LT_VER_NUM:-`echo ${ALM_RUBY_LT_VERSION} | (IFS=. read -r major minor build; printf "%2d%02d%02d" ${major:-0} ${minor:-0} ${build:-0})`}
 ALM_LOCAL_INSTALL_RUBY_VERSION=${ALM_LOCAL_INSTALL_RUBY_VERSION:-3.0.6}
 ALM_LOCAL_INSTALL_RUBY_VER_NUM=${ALM_LOCAL_INSTALL_RUBY_VER_NUM:-`echo ${ALM_LOCAL_INSTALL_RUBY_VERSION} | (IFS=. read -r major minor build; printf "%2d%02d%02d" ${major:-0} ${minor:-0} ${build:-0})`}
+ALM_RHEL8_PKG_INSTALL_RUBY_VERSION=${ALM_RHEL8_PKG_INSTALL_RUBY_VERSION:-3.0}
 
 RAILS_ENV=production
 
@@ -44,6 +49,9 @@ source inst-script/check-old-alm.sh
 
 # OSを確認
 source inst-script/check-os.sh
+
+# check ruby
+source inst-script/check-ruby.sh
 
 # gitコマンドをチェック
 source inst-script/check-git.sh
