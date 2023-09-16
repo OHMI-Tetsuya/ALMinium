@@ -5,7 +5,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 # package list update
 sudo apt-get -qq update || fatal_error_exit ${BASH_SOURCE}
-sudo apt-get -y autoremove || fatal_error_exit ${BASH_SOURCE}
 sudo apt-get install -y --no-install-recommends apt-utils || fatal_error_exit ${BASH_SOURCE}
 
 # add passenger to APT repository
@@ -29,13 +28,19 @@ APPARMOR_ENABLED=1
 JENKINS_SYS=debian
 
 # ruby
-if [ "`which ruby`" == "" ]; then
-  source inst-script/${OS}/install-ruby.sh
-else
-  RUBY_VER=$(ruby --version | cut -c 6-10 | (IFS=. read -r major minor build; printf "%2d%02d%02d" ${major:-0} ${minor:-0} ${build:-0}))
-  if [ ${RUBY_VER} -lt ${ALM_LOCAL_INSTALL_RUBY_VER_NUM} ]; then
-    source inst-script/${OS}/install-ruby.sh
+if [ "${RUBY_LOCAL_INSTALL}" = "y" -o "${RUBY_LOCAL_INSTALL}" = "Y" ]; then
+  if [ "${RUBY_PKG_UNINSTALL}" = "y" ]; then
+    sudo gem uninstall bundler || fatal_error_exit ${BASH_SOURCE}
+    sudo apt-get -y purge ruby ruby-dev || fatal_error_exit ${BASH_SOURCE}
+    sudo apt-get -y autoremove || fatal_error_exit ${BASH_SOURCE}
   fi
+
+  # install build dependencies
+  #sudo dnf install -y zlib zlib-devel gcc-c++ patch readline readline-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison curl sqlite-devel
+  #sudo apt-get install -y gcc g++ make libssl-dev libreadline-dev zlib1g-dev || fatal_error_exit ${BASH_SOURCE}
+  sudo apt-get install -y autoconf patch build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev || fatal_error_exit ${BASH_SOURCE}
+
+  source inst-script/install-rbenv-ruby.sh
 fi
 
 # install APT packages
