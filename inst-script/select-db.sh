@@ -33,7 +33,29 @@ if [ "${ALM_DB_SETUP}" = "y" ]; then
         done
       else
         ALM_DB_HOST=localhost
-        ALM_DB_ROOT_PASS=
+        if [ "${OS}" = "rhel7" ]; then
+          ALM_DB_ROOT_PASS=
+          ALM_DB_ROOT_PASS_1ST="1st"
+          ALM_DB_ROOT_PASS_2ND="2nd"
+          while :
+          do
+            echo ""
+            echo -n "データベース管理者パスワードを入力してください："
+            read -s ALM_DB_ROOT_PASS_1ST
+            echo ""
+            echo -n "もう一度入力してください："
+            read -s ALM_DB_ROOT_PASS_2ND
+            echo ""
+            if [ "${ALM_DB_ROOT_PASS_1ST}" != "${ALM_DB_ROOT_PASS_2ND}" ]; then
+              echo -e "\nパスワードが一致しません\nもう一度入力をお願い致します"
+            else
+              break
+            fi
+          done
+          ALM_DB_ROOT_PASS="${ALM_DB_ROOT_PASS_1ST}"
+        else
+          ALM_DB_ROOT_PASS=
+        fi
       fi
     else
       ALM_USE_EXISTING_DB=y

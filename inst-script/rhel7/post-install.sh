@@ -1,5 +1,13 @@
 #!/bin/bash
 
+###
+# Problem: Cannot start Redmine
+# Log: The application encountered the following error: You have already activated strscan 3.0.1, but your Gemfile requires strscan 3.0.4.
+#        Since strscan is a default gem, you can either remove your dependency on it or try updating to a newer version of bundler that supports strscan as a default gem.
+# Temporary solution: Force reinstall strscan
+###
+sudo bash -cl "${GEM} update strscan --no-document" || fatal_error_exit ${BASH_SOURCE}
+
 # Redmine Perlモジュール（リポジトリ認証連携）設定
 sudo mkdir -p /etc/httpd/Apache/Authn
 sudo rm -f /etc/httpd/Apache/Authn/Redmine.pm
@@ -38,12 +46,12 @@ if [ ! "${USE_DISABLE_SECURITY}" = "n" ]; then
 fi
 
 # MariaDB設定
-CHK=`grep "character-set-server=utf8" /etc/my.cnf`
-if [ "${CHK}" = "" ]; then
-  sudo mv /etc/my.cnf /etc/my.cnf.org
-  sudo bash -c "cat /etc/my.cnf.org | sed -e \"s/\[mysqld_safe\]/character-set-server=utf8\n\n\[mysqld_safe\]/g\" > /etc/my.cnf"
-  sudo bash -c "echo -e \"\n[mysql]\ndefault-character-set=utf8\n\" >> /etc/my.cnf"
-fi
+#CHK=`grep "character-set-server=utf8" /etc/my.cnf`
+#if [ "${CHK}" = "" ]; then
+#  sudo mv /etc/my.cnf /etc/my.cnf.org
+#  sudo bash -c "cat /etc/my.cnf.org | sed -e \"s/\[mysqld_safe\]/character-set-server=utf8\n\n\[mysqld_safe\]/g\" > /etc/my.cnf"
+#  sudo bash -c "echo -e \"\n[mysql]\ndefault-character-set=utf8\n\" >> /etc/my.cnf"
+#fi
 
 #chkconfig --add httpd
 sudo chkconfig httpd on
