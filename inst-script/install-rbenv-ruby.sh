@@ -8,8 +8,8 @@ fi
 if [ "`sudo bash -cl \"which rbenv\"`" = "" ]; then
   pushd /opt
 
-  sudo git clone https://github.com/sstephenson/rbenv.git || fatal_error_exit ${BASH_SOURCE}
-  sudo git clone https://github.com/sstephenson/ruby-build.git /opt/rbenv/plugins/ruby-build || fatal_error_exit ${BASH_SOURCE}
+  sudo bash -cl "git clone https://github.com/sstephenson/rbenv.git" || fatal_error_exit ${BASH_SOURCE}
+  sudo bash -cl "git clone https://github.com/sstephenson/ruby-build.git /opt/rbenv/plugins/ruby-build" || fatal_error_exit ${BASH_SOURCE}
 
   sudo bash -c "echo 'export RBENV_ROOT=/opt/rbenv' >> /etc/profile" || fatal_error_exit ${BASH_SOURCE}
   sudo bash -c 'echo '\''export PATH=${RBENV_ROOT}/bin:${PATH}'\'' >> /etc/profile' || fatal_error_exit ${BASH_SOURCE}

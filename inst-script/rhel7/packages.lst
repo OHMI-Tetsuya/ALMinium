@@ -1,54 +1,53 @@
-apr-devel
-byacc
+##### apr-devel
+##### byacc
 curl
 curl-devel
-db4-devel
-expat-devel
-gcc-c++
-gdbm-devel
-gettext-devel
-glibc-devel
+##### db4-devel
+##### expat-devel
+##### gcc-c++
+##### gdbm-devel
+##### gettext-devel
+##### glibc-devel
 httpd
 httpd-devel
 ImageMagick
 ImageMagick-devel
 ipa-pgothic-fonts
-libffi-devel
-libical
-libuuid-devel
-libxml2-devel
-libxslt-devel
-libyaml-devel
-make
-mariadb
-mariadb-devel
+##### libffi-devel
+##### libical
+##### libuuid-devel
+##### libxml2-devel
+##### libxslt-devel
+##### libyaml-devel
+##### make
+##### mariadb
+##### mariadb-devel
 mercurial
 mod_dav_svn
 #mod_passenger
 mod_perl
 mod_wsgi
-ncurses-devel
-openssl-devel
+##### ncurses-devel
+##### openssl-devel
 #passenger
 patch
 perl-Digest-SHA
-perl-ExtUtils-MakeMaker
-pygpgme
-python-docutils
-readline-devel
-rpm-build
-rpmdevtools
+##### perl-ExtUtils-MakeMaker
+##### pygpgme
+##### python-docutils
+##### readline-devel
+##### rpm-build
+##### rpmdevtools
 #ruby
 #ruby-devel
 #rubygem-nokogiri
 #rubygem-rack
 #rubygem-rake
 #rubygem-rake-compiler
-sqlite-devel
+##### sqlite-devel
 subversion
 sudo
-tcl-devel
+##### tcl-devel
 unzip
 wget
-zlib-devel
-
+##### zlib-devel
